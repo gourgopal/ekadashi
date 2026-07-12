@@ -3,7 +3,7 @@
  * Cache-first strategy for static assets + stale-while-revalidate for pages.
  */
 
-const CACHE_NAME = 'ekadashi-v1'
+const CACHE_NAME = 'ekadashi-v2'
 
 const PRECACHE_URLS = [
   '/',
