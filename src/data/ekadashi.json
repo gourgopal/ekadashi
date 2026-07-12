@@ -1,0 +1,737 @@
+[
+  {
+    "year": 2026,
+    "ekadashis": [
+      {
+        "name": "Shattila Ekadashi",
+        "date": "2026-01-14",
+        "paksha": "Krishna",
+        "month": "Magha",
+        "parana_start": "07:16",
+        "parana_end": "09:38",
+        "fasting_rules": "No grains, beans, or lentils. Sesame (til) is especially sacred today — donate it, consume it, bathe with it, or offer it. Fruits, roots, milk, and nuts are permitted.",
+        "significance": "One who observes this Ekadashi is freed from all sins. Sesame seeds are the main offering. Lord Vishnu is pleased and grants liberation."
+      },
+      {
+        "name": "Bhaimi (Jaya) Ekadashi",
+        "date": "2026-01-28",
+        "paksha": "Shukla",
+        "month": "Magha",
+        "parana_start": "07:09",
+        "parana_end": "09:28",
+        "fasting_rules": "Strict fast — no grains, no beans. Water, fruits, milk, and nuts permitted. Vaishnava devotees avoid even onion and garlic.",
+        "significance": "Observing Jaya Ekadashi frees one from the curse of becoming a ghost or evil spirit. It is one of the most important Ekadashis for liberation."
+      },
+      {
+        "name": "Vijaya Ekadashi",
+        "date": "2026-02-12",
+        "paksha": "Krishna",
+        "month": "Phalguna",
+        "parana_start": "06:58",
+        "parana_end": "09:15",
+        "fasting_rules": "No grains or legumes. Fruits, roots, milk, and nuts are permitted. One should worship Lord Vishnu all day and night if possible.",
+        "significance": "This Ekadashi grants victory in all endeavors. Lord Rama observed this fast before crossing the ocean to Lanka. Bestows piety equal to horse sacrifice."
+      },
+      {
+        "name": "Amalaki Ekadashi",
+        "date": "2026-02-27",
+        "paksha": "Shukla",
+        "month": "Phalguna",
+        "parana_start": "06:46",
+        "parana_end": "09:02",
+        "fasting_rules": "No grains or legumes. Worship the Amalaki (Indian gooseberry) tree — it is considered Lord Vishnu's favorite. Fruits, milk, and nuts allowed.",
+        "significance": "Also known as Rangbhari Ekadashi. The Amalaki tree embodies Lord Vishnu. Observance grants results equal to a thousand Ashwamedha yajnas."
+      },
+      {
+        "name": "Papmochani Ekadashi",
+        "date": "2026-03-14",
+        "paksha": "Krishna",
+        "month": "Chaitra",
+        "parana_start": "06:30",
+        "parana_end": "08:48",
+        "fasting_rules": "No grains, no beans. Fruits, milk, nuts, and roots are permitted. Worship Lord Vishnu and offer tulsi leaves.",
+        "significance": "Papmochani means 'destroyer of sins.' Even the gravest sins including Brahmahatya are destroyed by this fast. Grants liberation and purification of the soul."
+      },
+      {
+        "name": "Kamada Ekadashi",
+        "date": "2026-03-29",
+        "paksha": "Shukla",
+        "month": "Chaitra",
+        "parana_start": "06:14",
+        "parana_end": "08:32",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, nuts are allowed. If possible, worship Lord Vishnu all night. Recite or hear the glories of this Ekadashi.",
+        "significance": "Kamada means 'wish-fulfilling.' Destroys the worst sins including killing Brahmins. Frees one from the curse of becoming a Rakshasa. Grants all desires and moksha."
+      },
+      {
+        "name": "Varuthini Ekadashi",
+        "date": "2026-04-12",
+        "paksha": "Krishna",
+        "month": "Vaishakha",
+        "parana_start": "05:58",
+        "parana_end": "08:18",
+        "fasting_rules": "No grains, legumes, or gambling. Avoid sleeping during the day, eating multiple times, or false speech. Fruits, milk, nuts permitted.",
+        "significance": "Grants happiness in this world and liberation in the next. Equivalent to giving charity of 10,000 cows. Worshipping Lord Trivikrama is especially auspicious."
+      },
+      {
+        "name": "Mohini Ekadashi",
+        "date": "2026-04-28",
+        "paksha": "Shukla",
+        "month": "Vaishakha",
+        "parana_start": "05:44",
+        "parana_end": "08:04",
+        "fasting_rules": "No grains or legumes. Worship Lord Vishnu in His Mohini form. Fruits, milk, roots, and nuts are allowed. Observe brahmacharya.",
+        "significance": "Removes all attachments and illusion (moha). Grants liberation and results superior to bathing in all holy rivers. Destroys even very serious sins instantly."
+      },
+      {
+        "name": "Apara Ekadashi",
+        "date": "2026-05-12",
+        "paksha": "Krishna",
+        "month": "Jyeshtha",
+        "parana_start": "05:34",
+        "parana_end": "07:55",
+        "fasting_rules": "No grains or legumes. Fruits, milk, nuts, and roots permitted. Worship Lord Trivikrama. Avoid meat, fish, and intoxicants the day before.",
+        "significance": "Apara means 'unlimited.' This fast bestows unlimited merit equal to performing many great sacrifices. Destroys the sins of false witness, killing cows, and abandoning one's duty."
+      },
+      {
+        "name": "Pandava Nirjala Ekadashi",
+        "date": "2026-05-28",
+        "paksha": "Shukla",
+        "month": "Jyeshtha",
+        "parana_start": "05:29",
+        "parana_end": "07:49",
+        "fasting_rules": "Nirjala means complete fast — no food AND no water. Only achamana (sipping a tiny bit of water for purification) is permitted. This is the strictest Ekadashi fast.",
+        "significance": "The most powerful Ekadashi. One Nirjala Ekadashi equals all 24 other Ekadashis combined. Bhima observed this since he could not fast on all other Ekadashis. Grants immense punya."
+      },
+      {
+        "name": "Yogini Ekadashi",
+        "date": "2026-06-10",
+        "paksha": "Krishna",
+        "month": "Ashadha",
+        "parana_start": "05:28",
+        "parana_end": "07:49",
+        "fasting_rules": "No grains or legumes. Fruits, milk, nuts, and roots permitted. Feed Brahmins and devotees if possible. Worship Lord Vishnu.",
+        "significance": "Destroys all sins including crimes against sages. Grants liberation. Merit equals feeding 88,000 Brahmins. One who keeps this fast is freed from all diseases."
+      },
+      {
+        "name": "Shayani Ekadashi",
+        "date": "2026-06-26",
+        "paksha": "Shukla",
+        "month": "Ashadha",
+        "parana_start": "05:29",
+        "parana_end": "07:50",
+        "fasting_rules": "No grains or legumes. Lord Vishnu goes to Yoga-nidra (cosmic sleep) on this day, beginning the Chaturmasya period. Only fruits, milk, roots, and nuts allowed.",
+        "significance": "Also called Devshayani Ekadashi. Lord Vishnu reclines on Shesha Naga for 4 months. Marks the start of the sacred Chaturmasya period."
+      },
+      {
+        "name": "Kamika Ekadashi",
+        "date": "2026-07-10",
+        "paksha": "Krishna",
+        "month": "Shravana",
+        "parana_start": "05:33",
+        "parana_end": "07:55",
+        "fasting_rules": "No grains or legumes. Tulsi leaves should be offered to Lord Vishnu today. Fruits, milk, roots, and nuts are permitted.",
+        "significance": "Observing this Ekadashi during Chaturmasya is especially powerful. Grants results of bathing in holy rivers. Destroys sins equal to killing an elephant."
+      },
+      {
+        "name": "Pavitropana Ekadashi",
+        "date": "2026-07-26",
+        "paksha": "Shukla",
+        "month": "Shravana",
+        "parana_start": "05:42",
+        "parana_end": "08:03",
+        "fasting_rules": "No grains or legumes. Worship Lord Vishnu and offer a sacred thread (pavitra) made of cotton or gold. Fruits, milk, roots, and nuts allowed.",
+        "significance": "Also called Putrada Ekadashi. Grants sons to the childless, fame, and moksha. Removes sins of this and past lives. Especially auspicious during Chaturmasya."
+      },
+      {
+        "name": "Annada Ekadashi",
+        "date": "2026-08-09",
+        "paksha": "Krishna",
+        "month": "Bhadrapada",
+        "parana_start": "05:53",
+        "parana_end": "08:14",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, and nuts permitted. Feed the poor and Brahmins if possible — anna (food) charity is especially auspicious today.",
+        "significance": "Annada means 'giver of food.' Grants merit equal to giving unlimited food to the hungry. Destroys all sins and grants liberation."
+      },
+      {
+        "name": "Parsva Ekadashi",
+        "date": "2026-08-24",
+        "paksha": "Shukla",
+        "month": "Bhadrapada",
+        "parana_start": "06:04",
+        "parana_end": "08:24",
+        "fasting_rules": "No grains or legumes. Lord Vishnu turns on His side (parsva) during His cosmic sleep. Fruits, milk, roots, and nuts allowed. Worship Vamana Dev especially.",
+        "significance": "Also called Vamana Ekadashi or Parivartini Ekadashi. Lord Vishnu turns over in His sleep. Great piety earned; results equal to feeding 1,000 Brahmins."
+      },
+      {
+        "name": "Indira Ekadashi",
+        "date": "2026-09-07",
+        "paksha": "Krishna",
+        "month": "Ashvina",
+        "parana_start": "06:15",
+        "parana_end": "08:33",
+        "fasting_rules": "No grains or legumes. Special benefit: offer pinda (rice balls) to one's ancestors if possible. Fruits, milk, roots, and nuts permitted.",
+        "significance": "This Ekadashi rescues deceased ancestors from hellish planets. Especially sacred in Pitru Paksha."
+      },
+      {
+        "name": "Pasankusha Ekadashi",
+        "date": "2026-09-22",
+        "paksha": "Shukla",
+        "month": "Ashvina",
+        "parana_start": "06:25",
+        "parana_end": "08:41",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, and nuts are permitted. Worship Lord Padmanabha (Vishnu). This fast should be observed very strictly.",
+        "significance": "One of the greatest Ekadashis. Grants results equal to all forms of charity and pilgrimage combined. The devotee is freed from the cycle of birth and death."
+      },
+      {
+        "name": "Rama Ekadashi",
+        "date": "2026-10-07",
+        "paksha": "Krishna",
+        "month": "Kartika",
+        "parana_start": "06:36",
+        "parana_end": "08:52",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, and nuts permitted. Worship Lord Hrishikesha. Kartika month makes this especially auspicious.",
+        "significance": "Destroys all sins and grants liberation. Kartika is the most sacred month — this Ekadashi in Kartika is exceptionally powerful and beneficial."
+      },
+      {
+        "name": "Utthana Ekadashi",
+        "date": "2026-10-22",
+        "paksha": "Shukla",
+        "month": "Kartika",
+        "parana_start": "06:48",
+        "parana_end": "09:02",
+        "fasting_rules": "No grains or legumes. Lord Vishnu awakens from His cosmic sleep today — blow conch shells, ring bells, and chant! Fruits, milk, roots, nuts allowed.",
+        "significance": "Also called Prabodhini Ekadashi or Dev-Uthani Ekadashi. Lord Vishnu wakes up. The 4-month Chaturmasya period ends. All auspicious ceremonies can resume."
+      },
+      {
+        "name": "Utpanna Ekadashi",
+        "date": "2026-11-05",
+        "paksha": "Krishna",
+        "month": "Margashirsha",
+        "parana_start": "06:59",
+        "parana_end": "09:14",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, and nuts permitted. This is the birthday of Ekadashi — the personified deity who emerged to slay the demon Mura.",
+        "significance": "The origin of all Ekadashis. On this day, Ekadashi Devi was born from the body of Lord Vishnu to slay the demon Mura. Grants unlimited merit and destroys all sins."
+      },
+      {
+        "name": "Mokshada Ekadashi",
+        "date": "2026-11-20",
+        "paksha": "Shukla",
+        "month": "Margashirsha",
+        "parana_start": "07:09",
+        "parana_end": "09:22",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, and nuts allowed. Read or hear the Bhagavad Gita — it is especially meritorious today.",
+        "significance": "Mokshada means 'giver of liberation.' Can free deceased ancestors from hell. The Bhagavad Gita was spoken on this Ekadashi. One of the most sacred Ekadashis of the year."
+      },
+      {
+        "name": "Saphala Ekadashi",
+        "date": "2026-12-04",
+        "paksha": "Krishna",
+        "month": "Pausha",
+        "parana_start": "07:18",
+        "parana_end": "09:29",
+        "fasting_rules": "No grains or legumes. Fruits, nuts, coconut, lime, and milk permitted. Offer betel leaves, incense, lamps, and flowers to Lord Vishnu.",
+        "significance": "Saphala means 'fruitful.' Makes all endeavors successful. Destroys all sins and grants the same merit as performing a thousand Ashwamedha sacrifices."
+      },
+      {
+        "name": "Putrada Ekadashi",
+        "date": "2026-12-20",
+        "paksha": "Shukla",
+        "month": "Pausha",
+        "parana_start": "07:23",
+        "parana_end": "09:33",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, and nuts permitted. Worship Lord Narayana and pray for good progeny and family welfare.",
+        "significance": "Putrada means 'giver of sons/good children.' Grants pious progeny, removes childlessness, and ensures family lineage. Highly recommended for those desiring children."
+      }
+    ]
+  },
+  {
+    "year": 2027,
+    "ekadashis": [
+      {
+        "name": "Shattila Ekadashi",
+        "date": "2027-01-03",
+        "paksha": "Krishna",
+        "month": "Magha",
+        "parana_start": "07:23",
+        "parana_end": "09:33",
+        "fasting_rules": "No grains, beans, or lentils. Sesame (til) is especially sacred. Fruits, roots, milk, and nuts are permitted.",
+        "significance": "Freed from all sins. Lord Vishnu grants liberation. Six acts with sesame seeds on this day purify the soul completely."
+      },
+      {
+        "name": "Bhaimi (Jaya) Ekadashi",
+        "date": "2027-01-18",
+        "paksha": "Shukla",
+        "month": "Magha",
+        "parana_start": "07:18",
+        "parana_end": "09:28",
+        "fasting_rules": "Strict fast — no grains, no beans. Fruits, milk, and nuts permitted.",
+        "significance": "Frees one from the curse of becoming a ghost or evil spirit. Grants liberation even to those who observe it accidentally."
+      },
+      {
+        "name": "Vijaya Ekadashi",
+        "date": "2027-02-01",
+        "paksha": "Krishna",
+        "month": "Phalguna",
+        "parana_start": "07:10",
+        "parana_end": "09:19",
+        "fasting_rules": "No grains or legumes. Fruits, roots, milk, and nuts are permitted.",
+        "significance": "Grants victory in all endeavors. Lord Rama observed this fast before crossing the ocean to Lanka."
+      },
+      {
+        "name": "Amalaki Ekadashi",
+        "date": "2027-02-17",
+        "paksha": "Shukla",
+        "month": "Phalguna",
+        "parana_start": "06:57",
+        "parana_end": "09:05",
+        "fasting_rules": "No grains or legumes. Worship the Amalaki tree. Fruits, milk, and nuts allowed.",
+        "significance": "The Amalaki tree embodies Lord Vishnu. Results equal to a thousand Ashwamedha yajnas."
+      },
+      {
+        "name": "Papmochani Ekadashi",
+        "date": "2027-03-03",
+        "paksha": "Krishna",
+        "month": "Chaitra",
+        "parana_start": "06:43",
+        "parana_end": "08:51",
+        "fasting_rules": "No grains, no beans. Fruits, milk, nuts, and roots are permitted. Worship Lord Vishnu and offer tulsi leaves.",
+        "significance": "Destroyer of sins. Even the gravest sins are destroyed by this fast. Grants liberation and purification of the soul."
+      },
+      {
+        "name": "Kamada Ekadashi",
+        "date": "2027-03-18",
+        "paksha": "Shukla",
+        "month": "Chaitra",
+        "parana_start": "06:27",
+        "parana_end": "08:35",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, nuts are allowed. Worship Lord Vishnu all night.",
+        "significance": "Wish-fulfilling Ekadashi. Destroys the worst sins. Frees one from the curse of becoming a Rakshasa. Grants all desires and moksha."
+      },
+      {
+        "name": "Varuthini Ekadashi",
+        "date": "2027-04-02",
+        "paksha": "Krishna",
+        "month": "Vaishakha",
+        "parana_start": "06:10",
+        "parana_end": "08:20",
+        "fasting_rules": "No grains, legumes, or gambling. Avoid sleeping during the day. Fruits, milk, nuts permitted.",
+        "significance": "Grants happiness and liberation. Equivalent to giving 10,000 cows in charity."
+      },
+      {
+        "name": "Mohini Ekadashi",
+        "date": "2027-04-17",
+        "paksha": "Shukla",
+        "month": "Vaishakha",
+        "parana_start": "05:55",
+        "parana_end": "08:05",
+        "fasting_rules": "No grains or legumes. Worship Lord Vishnu in His Mohini form. Fruits, milk, roots, and nuts allowed.",
+        "significance": "Removes all attachments and illusion. Grants liberation superior to bathing in all holy rivers."
+      },
+      {
+        "name": "Apara Ekadashi",
+        "date": "2027-05-01",
+        "paksha": "Krishna",
+        "month": "Jyeshtha",
+        "parana_start": "05:43",
+        "parana_end": "07:54",
+        "fasting_rules": "No grains or legumes. Fruits, milk, nuts, and roots permitted. Worship Lord Trivikrama.",
+        "significance": "Bestows unlimited merit. Destroys the sins of false witness and killing cows. Results equal to performing many great sacrifices."
+      },
+      {
+        "name": "Pandava Nirjala Ekadashi",
+        "date": "2027-05-17",
+        "paksha": "Shukla",
+        "month": "Jyeshtha",
+        "parana_start": "05:36",
+        "parana_end": "07:47",
+        "fasting_rules": "Complete fast — no food AND no water (nirjala). Only achamana is permitted. The strictest and most powerful Ekadashi fast.",
+        "significance": "One Nirjala Ekadashi equals all 24 other Ekadashis combined. Grants immense punya and liberation."
+      },
+      {
+        "name": "Yogini Ekadashi",
+        "date": "2027-05-31",
+        "paksha": "Krishna",
+        "month": "Ashadha",
+        "parana_start": "05:31",
+        "parana_end": "07:43",
+        "fasting_rules": "No grains or legumes. Fruits, milk, nuts, and roots permitted. Feed Brahmins and devotees if possible.",
+        "significance": "Destroys all sins. Merit equals feeding 88,000 Brahmins. Frees one from all diseases."
+      },
+      {
+        "name": "Shayani Ekadashi",
+        "date": "2027-06-15",
+        "paksha": "Shukla",
+        "month": "Ashadha",
+        "parana_start": "05:29",
+        "parana_end": "07:40",
+        "fasting_rules": "No grains or legumes. Lord Vishnu enters Yoga-nidra. Begin Chaturmasya vows.",
+        "significance": "Lord Vishnu reclines on Shesha Naga for 4 months. Marks the start of the sacred Chaturmasya period."
+      },
+      {
+        "name": "Kamika Ekadashi",
+        "date": "2027-06-29",
+        "paksha": "Krishna",
+        "month": "Shravana",
+        "parana_start": "05:30",
+        "parana_end": "07:42",
+        "fasting_rules": "No grains or legumes. Tulsi leaves should be offered. Fruits, milk, roots, and nuts are permitted.",
+        "significance": "Especially powerful during Chaturmasya. Grants results of bathing in holy rivers."
+      },
+      {
+        "name": "Pavitropana Ekadashi",
+        "date": "2027-07-15",
+        "paksha": "Shukla",
+        "month": "Shravana",
+        "parana_start": "05:36",
+        "parana_end": "07:49",
+        "fasting_rules": "No grains or legumes. Offer a sacred thread (pavitra) to Lord Vishnu. Fruits, milk, roots, and nuts allowed.",
+        "significance": "Grants sons to the childless, fame, and moksha. Removes sins of this and past lives."
+      },
+      {
+        "name": "Annada Ekadashi",
+        "date": "2027-07-28",
+        "paksha": "Krishna",
+        "month": "Bhadrapada",
+        "parana_start": "05:46",
+        "parana_end": "07:58",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, and nuts permitted. Feed the poor — anna charity is especially auspicious.",
+        "significance": "Giver of food. Grants merit equal to giving unlimited food to the hungry. Destroys all sins and grants liberation."
+      },
+      {
+        "name": "Parsva Ekadashi",
+        "date": "2027-08-13",
+        "paksha": "Shukla",
+        "month": "Bhadrapada",
+        "parana_start": "05:58",
+        "parana_end": "08:09",
+        "fasting_rules": "No grains or legumes. Lord Vishnu turns on His side. Worship Vamana Dev. Fruits, milk, roots, and nuts allowed.",
+        "significance": "Also called Parivartini Ekadashi. Lord Vishnu turns over in His sleep. Results equal to feeding 1,000 Brahmins."
+      },
+      {
+        "name": "Indira Ekadashi",
+        "date": "2027-08-27",
+        "paksha": "Krishna",
+        "month": "Ashvina",
+        "parana_start": "06:09",
+        "parana_end": "08:19",
+        "fasting_rules": "No grains or legumes. Offer pinda to ancestors if possible. Fruits, milk, roots, and nuts permitted.",
+        "significance": "Rescues deceased ancestors from hellish planets. Especially sacred in Pitru Paksha."
+      },
+      {
+        "name": "Pasankusha Ekadashi",
+        "date": "2027-09-11",
+        "paksha": "Shukla",
+        "month": "Ashvina",
+        "parana_start": "06:20",
+        "parana_end": "08:28",
+        "fasting_rules": "No grains or legumes. Worship Lord Padmanabha very strictly. Fruits, milk, roots, and nuts allowed.",
+        "significance": "One of the greatest Ekadashis. Grants results equal to all forms of charity and pilgrimage. Devotee freed from cycle of birth and death."
+      },
+      {
+        "name": "Rama Ekadashi",
+        "date": "2027-09-26",
+        "paksha": "Krishna",
+        "month": "Kartika",
+        "parana_start": "06:31",
+        "parana_end": "08:37",
+        "fasting_rules": "No grains or legumes. Worship Lord Hrishikesha. Fruits, milk, roots, and nuts permitted.",
+        "significance": "Destroys all sins and grants liberation. Kartika month makes this Ekadashi exceptionally powerful."
+      },
+      {
+        "name": "Utthana Ekadashi",
+        "date": "2027-10-11",
+        "paksha": "Shukla",
+        "month": "Kartika",
+        "parana_start": "06:42",
+        "parana_end": "08:47",
+        "fasting_rules": "No grains or legumes. Lord Vishnu awakens today. Blow conch, ring bells, and chant! Fruits, milk, roots, nuts allowed.",
+        "significance": "Also called Prabodhini Ekadashi or Dev-Uthani Ekadashi. Lord Vishnu wakes up. Chaturmasya ends. All auspicious ceremonies can resume."
+      },
+      {
+        "name": "Utpanna Ekadashi",
+        "date": "2027-10-25",
+        "paksha": "Krishna",
+        "month": "Margashirsha",
+        "parana_start": "06:54",
+        "parana_end": "08:58",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, and nuts permitted. Birthday of Ekadashi Devi.",
+        "significance": "The origin of all Ekadashis. Ekadashi Devi was born from Lord Vishnu to slay the demon Mura. Grants unlimited merit."
+      },
+      {
+        "name": "Mokshada Ekadashi",
+        "date": "2027-11-09",
+        "paksha": "Shukla",
+        "month": "Margashirsha",
+        "parana_start": "07:03",
+        "parana_end": "09:06",
+        "fasting_rules": "No grains or legumes. Read or hear the Bhagavad Gita. Fruits, milk, roots, and nuts allowed.",
+        "significance": "Giver of liberation. Can free deceased ancestors from hell. The Bhagavad Gita was spoken on this Ekadashi."
+      },
+      {
+        "name": "Saphala Ekadashi",
+        "date": "2027-11-24",
+        "paksha": "Krishna",
+        "month": "Pausha",
+        "parana_start": "07:13",
+        "parana_end": "09:14",
+        "fasting_rules": "No grains or legumes. Fruits, nuts, coconut, lime, and milk permitted.",
+        "significance": "Makes all endeavors successful. Destroys all sins and grants merit equal to a thousand Ashwamedha sacrifices."
+      },
+      {
+        "name": "Putrada Ekadashi",
+        "date": "2027-12-09",
+        "paksha": "Shukla",
+        "month": "Pausha",
+        "parana_start": "07:20",
+        "parana_end": "09:20",
+        "fasting_rules": "No grains or legumes. Worship Lord Narayana for good progeny. Fruits, milk, roots, and nuts permitted.",
+        "significance": "Giver of pious children. Grants progeny, removes childlessness, and ensures family lineage."
+      }
+    ]
+  },
+  {
+    "year": 2028,
+    "ekadashis": [
+      {
+        "name": "Shattila Ekadashi",
+        "date": "2028-01-22",
+        "paksha": "Krishna",
+        "month": "Magha",
+        "parana_start": "07:20",
+        "parana_end": "09:30",
+        "fasting_rules": "No grains, beans, or lentils. Sesame (til) is especially sacred. Fruits, roots, milk, and nuts are permitted.",
+        "significance": "Freed from all sins. Lord Vishnu grants liberation."
+      },
+      {
+        "name": "Bhaimi (Jaya) Ekadashi",
+        "date": "2028-02-07",
+        "paksha": "Shukla",
+        "month": "Magha",
+        "parana_start": "07:10",
+        "parana_end": "09:19",
+        "fasting_rules": "Strict fast — no grains, no beans. Fruits, milk, and nuts permitted.",
+        "significance": "Frees one from becoming a ghost or evil spirit. Grants liberation even to those who observe it accidentally."
+      },
+      {
+        "name": "Vijaya Ekadashi",
+        "date": "2028-02-21",
+        "paksha": "Krishna",
+        "month": "Phalguna",
+        "parana_start": "06:58",
+        "parana_end": "09:06",
+        "fasting_rules": "No grains or legumes. Fruits, roots, milk, and nuts are permitted.",
+        "significance": "Grants victory in all endeavors. Lord Rama observed this fast before crossing the ocean to Lanka."
+      },
+      {
+        "name": "Amalaki Ekadashi",
+        "date": "2028-03-06",
+        "paksha": "Shukla",
+        "month": "Phalguna",
+        "parana_start": "06:42",
+        "parana_end": "08:52",
+        "fasting_rules": "No grains or legumes. Worship the Amalaki tree. Fruits, milk, and nuts allowed.",
+        "significance": "The Amalaki tree embodies Lord Vishnu. Results equal to a thousand Ashwamedha yajnas."
+      },
+      {
+        "name": "Papmochani Ekadashi",
+        "date": "2028-03-21",
+        "paksha": "Krishna",
+        "month": "Chaitra",
+        "parana_start": "06:24",
+        "parana_end": "08:34",
+        "fasting_rules": "No grains, no beans. Fruits, milk, nuts, and roots are permitted.",
+        "significance": "Destroyer of sins. Even the gravest sins are destroyed. Grants liberation."
+      },
+      {
+        "name": "Kamada Ekadashi",
+        "date": "2028-04-05",
+        "paksha": "Shukla",
+        "month": "Chaitra",
+        "parana_start": "06:05",
+        "parana_end": "08:17",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, nuts are allowed. Worship Lord Vishnu all night.",
+        "significance": "Wish-fulfilling Ekadashi. Destroys the worst sins. Grants all desires and moksha."
+      },
+      {
+        "name": "Varuthini Ekadashi",
+        "date": "2028-04-20",
+        "paksha": "Krishna",
+        "month": "Vaishakha",
+        "parana_start": "05:49",
+        "parana_end": "08:01",
+        "fasting_rules": "No grains, legumes, or gambling. Fruits, milk, nuts permitted.",
+        "significance": "Grants happiness and liberation. Equivalent to giving 10,000 cows in charity."
+      },
+      {
+        "name": "Mohini Ekadashi",
+        "date": "2028-05-05",
+        "paksha": "Shukla",
+        "month": "Vaishakha",
+        "parana_start": "05:36",
+        "parana_end": "07:48",
+        "fasting_rules": "No grains or legumes. Worship Lord Vishnu in His Mohini form. Fruits, milk, roots, and nuts allowed.",
+        "significance": "Removes all attachments and illusion. Grants liberation superior to bathing in all holy rivers."
+      },
+      {
+        "name": "Apara Ekadashi",
+        "date": "2028-05-19",
+        "paksha": "Krishna",
+        "month": "Jyeshtha",
+        "parana_start": "05:28",
+        "parana_end": "07:40",
+        "fasting_rules": "No grains or legumes. Fruits, milk, nuts, and roots permitted.",
+        "significance": "Bestows unlimited merit equal to performing many great sacrifices. Destroys sins of false witness."
+      },
+      {
+        "name": "Pandava Nirjala Ekadashi",
+        "date": "2028-06-04",
+        "paksha": "Shukla",
+        "month": "Jyeshtha",
+        "parana_start": "05:25",
+        "parana_end": "07:37",
+        "fasting_rules": "Complete fast — no food AND no water (nirjala). Only achamana is permitted.",
+        "significance": "One Nirjala Ekadashi equals all 24 other Ekadashis. Grants immense punya and liberation."
+      },
+      {
+        "name": "Yogini Ekadashi",
+        "date": "2028-06-18",
+        "paksha": "Krishna",
+        "month": "Ashadha",
+        "parana_start": "05:26",
+        "parana_end": "07:38",
+        "fasting_rules": "No grains or legumes. Fruits, milk, nuts, and roots permitted.",
+        "significance": "Destroys all sins. Merit equals feeding 88,000 Brahmins. Frees one from all diseases."
+      },
+      {
+        "name": "Shayani Ekadashi",
+        "date": "2028-07-04",
+        "paksha": "Shukla",
+        "month": "Ashadha",
+        "parana_start": "05:30",
+        "parana_end": "07:41",
+        "fasting_rules": "No grains or legumes. Lord Vishnu enters Yoga-nidra (cosmic sleep). Begin Chaturmasya vows.",
+        "significance": "Lord Vishnu reclines on Shesha Naga for 4 months. Marks start of Chaturmasya."
+      },
+      {
+        "name": "Kamika Ekadashi",
+        "date": "2028-07-17",
+        "paksha": "Krishna",
+        "month": "Shravana",
+        "parana_start": "05:36",
+        "parana_end": "07:47",
+        "fasting_rules": "No grains or legumes. Offer tulsi leaves. Fruits, milk, roots, and nuts are permitted.",
+        "significance": "Especially powerful during Chaturmasya. Grants results of bathing in holy rivers."
+      },
+      {
+        "name": "Pavitropana Ekadashi",
+        "date": "2028-08-01",
+        "paksha": "Shukla",
+        "month": "Shravana",
+        "parana_start": "05:47",
+        "parana_end": "07:57",
+        "fasting_rules": "No grains or legumes. Offer a sacred thread (pavitra) to Lord Vishnu. Fruits, milk, roots, and nuts allowed.",
+        "significance": "Grants sons to the childless, fame, and moksha. Removes sins of this and past lives."
+      },
+      {
+        "name": "Annada Ekadashi",
+        "date": "2028-08-15",
+        "paksha": "Krishna",
+        "month": "Bhadrapada",
+        "parana_start": "05:58",
+        "parana_end": "08:07",
+        "fasting_rules": "No grains or legumes. Fruits, milk, roots, and nuts permitted. Feed the poor and Brahmins.",
+        "significance": "Giver of food. Grants merit equal to giving unlimited food to the hungry. Destroys all sins."
+      },
+      {
+        "name": "Parsva Ekadashi",
+        "date": "2028-09-01",
+        "paksha": "Shukla",
+        "month": "Bhadrapada",
+        "parana_start": "06:11",
+        "parana_end": "08:18",
+        "fasting_rules": "No grains or legumes. Lord Vishnu turns on His side. Worship Vamana Dev.",
+        "significance": "Also called Parivartini Ekadashi. Results equal to feeding 1,000 Brahmins."
+      },
+      {
+        "name": "Indira Ekadashi",
+        "date": "2028-09-15",
+        "paksha": "Krishna",
+        "month": "Ashvina",
+        "parana_start": "06:22",
+        "parana_end": "08:28",
+        "fasting_rules": "No grains or legumes. Offer pinda to ancestors if possible. Fruits, milk, roots, and nuts permitted.",
+        "significance": "Rescues deceased ancestors from hellish planets. Especially sacred in Pitru Paksha."
+      },
+      {
+        "name": "Pasankusha Ekadashi",
+        "date": "2028-09-30",
+        "paksha": "Shukla",
+        "month": "Ashvina",
+        "parana_start": "06:32",
+        "parana_end": "08:36",
+        "fasting_rules": "No grains or legumes. Worship Lord Padmanabha very strictly. Fruits, milk, roots, and nuts allowed.",
+        "significance": "One of the greatest Ekadashis. Grants results equal to all forms of charity and pilgrimage."
+      },
+      {
+        "name": "Rama Ekadashi",
+        "date": "2028-10-14",
+        "paksha": "Krishna",
+        "month": "Kartika",
+        "parana_start": "06:43",
+        "parana_end": "08:46",
+        "fasting_rules": "No grains or legumes. Worship Lord Hrishikesha. Fruits, milk, roots, and nuts permitted.",
+        "significance": "Destroys all sins and grants liberation. Kartika month makes this Ekadashi exceptionally powerful."
+      },
+      {
+        "name": "Utthana Ekadashi",
+        "date": "2028-10-29",
+        "paksha": "Shukla",
+        "month": "Kartika",
+        "parana_start": "06:53",
+        "parana_end": "08:54",
+        "fasting_rules": "No grains or legumes. Lord Vishnu awakens! Blow conch, ring bells, chant! Fruits, milk, roots, nuts allowed.",
+        "significance": "Prabodhini / Dev-Uthani Ekadashi. Lord Vishnu wakes up. Chaturmasya ends. All auspicious ceremonies can resume."
+      },
+      {
+        "name": "Utpanna Ekadashi",
+        "date": "2028-11-13",
+        "paksha": "Krishna",
+        "month": "Margashirsha",
+        "parana_start": "07:03",
+        "parana_end": "09:03",
+        "fasting_rules": "No grains or legumes. Birthday of Ekadashi Devi. Celebrate with chanting and reading scripture.",
+        "significance": "Origin of all Ekadashis. Ekadashi Devi was born from Lord Vishnu to slay demon Mura. Grants unlimited merit."
+      },
+      {
+        "name": "Mokshada Ekadashi",
+        "date": "2028-11-28",
+        "paksha": "Shukla",
+        "month": "Margashirsha",
+        "parana_start": "07:11",
+        "parana_end": "09:09",
+        "fasting_rules": "No grains or legumes. Read or hear the Bhagavad Gita. Fruits, milk, roots, and nuts allowed.",
+        "significance": "Giver of liberation. Can free deceased ancestors from hell. The Bhagavad Gita was spoken on this Ekadashi."
+      },
+      {
+        "name": "Saphala Ekadashi",
+        "date": "2028-12-12",
+        "paksha": "Krishna",
+        "month": "Pausha",
+        "parana_start": "07:17",
+        "parana_end": "09:14",
+        "fasting_rules": "No grains or legumes. Fruits, nuts, coconut, lime, and milk permitted.",
+        "significance": "Makes all endeavors successful. Grants merit equal to a thousand Ashwamedha sacrifices."
+      },
+      {
+        "name": "Putrada Ekadashi",
+        "date": "2028-12-27",
+        "paksha": "Shukla",
+        "month": "Pausha",
+        "parana_start": "07:21",
+        "parana_end": "09:18",
+        "fasting_rules": "No grains or legumes. Worship Lord Narayana for good progeny. Fruits, milk, roots, and nuts permitted.",
+        "significance": "Giver of pious children. Grants progeny, removes childlessness, and ensures family lineage."
+      }
+    ]
+  }
+]

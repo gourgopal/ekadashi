@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "home": "Home",
+    "calendar": "Calendar",
+    "tracker": "Jaap Tracker",
+    "resources": "Resources",
+    "tagline": "Hare Krishna"
+  },
+  "home": {
+    "hero_title": "Gaudiya Vaishnava",
+    "hero_subtitle": "Ekadashi Calendar",
+    "hero_desc": "Observe the sacred fast of the Lord with precision. Your complete guide to Ekadashi fasting, parana times, and spiritual practice.",
+    "next_ekadashi": "Next Ekadashi",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "fasting_rules": "Fasting Rules",
+    "parana_time": "Parana Time (Break Fast)",
+    "significance": "Significance",
+    "view_calendar": "View Full Calendar",
+    "chant_now": "Begin Jaap",
+    "upcoming": "Upcoming Ekadashis",
+    "paksha_shukla": "Shukla Paksha",
+    "paksha_krishna": "Krishna Paksha",
+    "today_is_ekadashi": "Today is Ekadashi!",
+    "loading": "Loading..."
+  },
+  "calendar": {
+    "title": "Ekadashi Calendar 2026–2028",
+    "description": "Complete list of all Ekadashi fasting days with parana times and significance.",
+    "filter_year": "Filter by Year",
+    "all_years": "All Years",
+    "parana": "Parana",
+    "to": "to",
+    "paksha": "Paksha"
+  },
+  "tracker": {
+    "title": "Naam Jaap Tracker",
+    "subtitle": "Hare Krishna Mahā-mantra",
+    "tap_zone": "Tap to Chant",
+    "beads": "Beads",
+    "rounds": "Rounds",
+    "daily_count": "Today's Count",
+    "one_round": "1 round = 108 beads",
+    "reset": "Reset Today",
+    "reset_confirm": "Reset your count for today?",
+    "yes": "Yes, reset",
+    "cancel": "Cancel",
+    "mahamantra": "Hare Krishna Hare Krishna Krishna Krishna Hare Hare | Hare Rama Hare Rama Rama Rama Hare Hare"
+  },
+  "resources": {
+    "title": "Spiritual Resources",
+    "subtitle": "Curated books and sacred items for your Vaishnava practice",
+    "buy_now": "Get on Amazon",
+    "affiliate_note": "Links support this seva. As an Amazon Associate we earn from qualifying purchases."
+  },
+  "player": {
+    "now_playing": "Ambient Kirtan",
+    "play": "Play",
+    "pause": "Pause",
+    "volume": "Volume"
+  },
+  "seo": {
+    "site_name": "Ekadashi Vrat — Gaudiya Vaishnava Calendar",
+    "home_title": "Ekadashi Calendar 2026 | ISKCON Fasting Dates & Parana Times",
+    "home_desc": "Complete Gaudiya Vaishnava Ekadashi calendar for 2026, 2027 & 2028. Find upcoming fasting dates, parana times, and spiritual significance for ISKCON devotees worldwide.",
+    "calendar_title": "Ekadashi Calendar 2026–2028 | All Vaishnava Fasting Dates",
+    "calendar_desc": "Full list of all 72 Ekadashi fasting days from 2026 to 2028 with parana times for Gaudiya Vaishnavas and ISKCON devotees.",
+    "tracker_title": "Naam Jaap Counter | Hare Krishna Maha-mantra Tracker",
+    "tracker_desc": "Digital bead counter for tracking Hare Krishna Maha-mantra rounds. Count your daily jaap online with round tracking and local storage.",
+    "resources_title": "Spiritual Resources | Ekadashi Books & ISKCON Study Materials",
+    "resources_desc": "Shop Ekadashi Vrat Katha, ISKCON books by Srila Prabhupada, and sacred Vaishnava study materials curated for devotees."
+  }
+}

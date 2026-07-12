@@ -1,0 +1,3 @@
+# Cloudflare Pages — SPA Redirect Rules
+# Routes all paths to root for client-side routing fallback
+/*    /index.html    200
