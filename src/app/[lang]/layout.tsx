@@ -4,6 +4,7 @@ import { getDictionary } from '@/lib/get-dictionary'
 import Navigation from '@/components/Navigation'
 import KirtanPlayer from '@/components/KirtanPlayer'
 import RegisterSW from '@/components/RegisterSW'
+import InstallPrompt from '@/components/InstallPrompt'
 import NotificationPrompt from '@/components/NotificationPrompt'
 import '../globals.css'
 
@@ -93,6 +94,8 @@ export default async function LangLayout({
       />
 
       <RegisterSW />
+
+      <InstallPrompt />
 
       <NotificationPrompt
         labels={{
