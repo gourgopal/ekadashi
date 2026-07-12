@@ -4,6 +4,7 @@ import { getDictionary } from '@/lib/get-dictionary'
 import Navigation from '@/components/Navigation'
 import KirtanPlayer from '@/components/KirtanPlayer'
 import RegisterSW from '@/components/RegisterSW'
+import NotificationPrompt from '@/components/NotificationPrompt'
 import '../globals.css'
 
 export async function generateStaticParams() {
@@ -92,6 +93,16 @@ export default async function LangLayout({
       />
 
       <RegisterSW />
+
+      <NotificationPrompt
+        labels={{
+          title:    dict.notif.title,
+          message:  dict.notif.message,
+          enable:   dict.notif.enable,
+          later:    dict.notif.later,
+          thanks:   dict.notif.thanks,
+        }}
+      />
     </>
   )
 }

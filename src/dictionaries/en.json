@@ -67,6 +67,13 @@
     "pause": "Pause",
     "volume": "Volume"
   },
+  "notif": {
+    "title": "Stay Connected",
+    "message": "Get notified when an Ekadashi arrives and set a daily Naam Jaap reminder so you never miss your rounds.",
+    "enable": "Enable Notifications",
+    "later": "Maybe Later",
+    "thanks": "Notifications enabled! Manage reminders on the Jaap Tracker page."
+  },
   "seo": {
     "site_name": "Ekadashi Vrat — Gaudiya Vaishnava Calendar",
     "home_title": "Ekadashi Calendar 2026 | ISKCON Fasting Dates & Parana Times",

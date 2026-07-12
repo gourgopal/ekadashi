@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { locales, isValidLocale, defaultLocale, type Locale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/get-dictionary'
 import ekadashiData from '@/data/ekadashi.json'
+import CalendarScroll from '@/components/CalendarScroll'
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }))
@@ -41,6 +42,7 @@ export default async function CalendarPage({
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
+      <CalendarScroll />
       {/* Page header */}
       <div className="text-center mb-12">
         <div
