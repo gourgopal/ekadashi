@@ -58,46 +58,40 @@ export default async function LangLayout({
   const dict = await getDictionary(lang)
 
   return (
-    <html lang={lang} className="dark">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      </head>
-      <body>
-        {/* Stars background (pure CSS, rendered server-side) */}
-        <div className="stars-bg" aria-hidden="true">
-          {Array.from({ length: 60 }).map((_, i) => (
-            <div
-              key={i}
-              className="star"
-              style={{
-                left:  `${Math.random() * 100}%`,
-                top:   `${Math.random() * 100}%`,
-                width:  `${Math.random() * 2 + 1}px`,
-                height: `${Math.random() * 2 + 1}px`,
-                animationDelay: `${Math.random() * 4}s`,
-                animationDuration: `${2 + Math.random() * 3}s`,
-                opacity: Math.random() * 0.6 + 0.1,
-              }}
-            />
-          ))}
-        </div>
+    <>
+      {/* Stars background (pure CSS, rendered server-side) */}
+      <div className="stars-bg" aria-hidden="true">
+        {Array.from({ length: 60 }).map((_, i) => (
+          <div
+            key={i}
+            className="star"
+            style={{
+              left:  `${Math.random() * 100}%`,
+              top:   `${Math.random() * 100}%`,
+              width:  `${Math.random() * 2 + 1}px`,
+              height: `${Math.random() * 2 + 1}px`,
+              animationDelay: `${Math.random() * 4}s`,
+              animationDuration: `${2 + Math.random() * 3}s`,
+              opacity: Math.random() * 0.6 + 0.1,
+            }}
+          />
+        ))}
+      </div>
 
-        <Navigation lang={lang} dict={dict} />
+      <Navigation lang={lang} dict={dict} />
 
-        <main className="page-body">
-          {children}
-        </main>
+      <main className="page-body">
+        {children}
+      </main>
 
-        <KirtanPlayer
-          nowPlayingLabel={dict.player.now_playing}
-          playLabel={dict.player.play}
-          pauseLabel={dict.player.pause}
-          volumeLabel={dict.player.volume}
-        />
+      <KirtanPlayer
+        nowPlayingLabel={dict.player.now_playing}
+        playLabel={dict.player.play}
+        pauseLabel={dict.player.pause}
+        volumeLabel={dict.player.volume}
+      />
 
-        <RegisterSW />
-      </body>
-    </html>
+      <RegisterSW />
+    </>
   )
 }

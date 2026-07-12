@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { hasPermission, requestPermission, wasPrompted, scheduleJaapReminder, getJaapReminderHour, clearJaapReminderHour, showNaamJaapReminder } from '@/lib/notifications'
 
 const STORAGE_KEY = 'ekadashi_jaap_tracker'
 const BEADS_PER_ROUND = 108
@@ -24,6 +25,12 @@ interface JaapTrackerProps {
     yes: string
     cancel: string
     mahamantra: string
+    reminder_title?: string
+    set_reminder?: string
+    reminder_time?: string
+    reminder_set?: string
+    reminder_off?: string
+    notifications_off?: string
   }
 }
 
@@ -36,10 +43,14 @@ export default function JaapTracker({ labels }: JaapTrackerProps) {
   const [confirmReset, setConfirmReset] = useState(false)
   const [ripple, setRipple] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [reminderHour, setReminderHour] = useState<number | null>(null)
+  const [notifSupported, setNotifSupported] = useState(false)
+  const reminderScheduled = useRef(false)
 
   // Load from localStorage on mount; auto-reset if date changed
   useEffect(() => {
     setMounted(true)
+    setNotifSupported(typeof Notification !== 'undefined')
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
@@ -47,7 +58,6 @@ export default function JaapTracker({ labels }: JaapTrackerProps) {
         if (data.date === getTodayISO()) {
           setCount(data.count)
         } else {
-          // New day — reset
           setCount(0)
           localStorage.setItem(
             STORAGE_KEY,
@@ -58,6 +68,9 @@ export default function JaapTracker({ labels }: JaapTrackerProps) {
     } catch {
       // Ignore parse errors
     }
+    // Restore reminder hour
+    const saved = getJaapReminderHour()
+    if (saved !== null) setReminderHour(saved)
   }, [])
 
   const save = useCallback((newCount: number) => {
@@ -68,6 +81,30 @@ export default function JaapTracker({ labels }: JaapTrackerProps) {
       )
     } catch { /* Quota exceeded or private browsing */ }
   }, [])
+
+  // Schedule daily reminder
+  useEffect(() => {
+    if (reminderHour !== null && notifSupported && hasPermission() && !reminderScheduled.current) {
+      reminderScheduled.current = true
+      scheduleJaapReminder(reminderHour, labels.mahamantra)
+    }
+  }, [reminderHour, notifSupported, labels.mahamantra])
+
+  const handleSetReminder = async () => {
+    if (!hasPermission()) {
+      const ok = await requestPermission()
+      if (!ok) return
+    }
+    const hour = 6 // default 6 AM
+    setReminderHour(hour)
+    scheduleJaapReminder(hour, labels.mahamantra)
+  }
+
+  const handleClearReminder = () => {
+    setReminderHour(null)
+    clearJaapReminderHour()
+    reminderScheduled.current = false
+  }
 
   const handleTap = () => {
     const newCount = count + 1
@@ -241,6 +278,53 @@ export default function JaapTracker({ labels }: JaapTrackerProps) {
           </span>
         </div>
       </button>
+
+      {/* Reminder section */}
+      {notifSupported && labels.reminder_title && (
+        <div className="w-full glass rounded-2xl p-4" style={{ border: '1px solid rgba(244,196,48,0.12)' }}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">🔔</span>
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#F4C430' }}>
+                  {labels.reminder_title}
+                </div>
+                <div className="text-xs mt-0.5" style={{ color: 'rgba(210,180,140,0.6)' }}>
+                  {reminderHour !== null
+                    ? `${labels.reminder_set} ${reminderHour}:00`
+                    : labels.reminder_off}
+                </div>
+              </div>
+            </div>
+            {reminderHour !== null ? (
+              <button
+                onClick={handleClearReminder}
+                className="text-xs px-3 py-1.5 rounded-full transition-colors"
+                style={{
+                  color: 'rgba(210,180,140,0.6)',
+                  border: '1px solid rgba(210,180,140,0.2)',
+                  cursor: 'pointer',
+                }}
+              >
+                {labels.reminder_off}
+              </button>
+            ) : (
+              <button
+                onClick={handleSetReminder}
+                className="btn-saffron text-xs px-3 py-1.5"
+                style={{ fontSize: '0.7rem' }}
+              >
+                {labels.set_reminder}
+              </button>
+            )}
+          </div>
+          {!hasPermission() && !wasPrompted() && (
+            <p className="text-xs mt-2" style={{ color: 'rgba(210,180,140,0.4)' }}>
+              {labels.notifications_off}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Reset button */}
       {!confirmReset ? (

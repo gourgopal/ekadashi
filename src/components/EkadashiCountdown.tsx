@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { hasPermission, requestPermission, showEkadashiNotification, wasPrompted } from '@/lib/notifications'
 
 interface EkadashiEntry {
   name: string
@@ -58,6 +59,13 @@ export default function EkadashiCountdown({ ekadashis, labels, lang }: EkadashiC
 
     if (diff <= 0) {
       setTimeLeft({ d: 0, h: 0, m: 0, s: 0, isToday: true })
+      if (hasPermission()) {
+        showEkadashiNotification(next.name, `${next.parana_start} – ${next.parana_end}`)
+      } else if (!wasPrompted()) {
+        requestPermission().then((ok) => {
+          if (ok) showEkadashiNotification(next.name, `${next.parana_start} – ${next.parana_end}`)
+        })
+      }
       return
     }
     const d = Math.floor(diff / 86400000)

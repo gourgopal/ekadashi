@@ -75,13 +75,17 @@ self.addEventListener('fetch', (event) => {
 
   // Navigation / HTML: stale-while-revalidate
   event.respondWith(
-    caches.open(CACHE_NAME).then(async (cache) => {
+    (async () => {
+      const cache = await caches.open(CACHE_NAME)
       const cached = await cache.match(request)
-      const networkPromise = fetch(request).then((res) => {
+      if (cached) return cached
+      try {
+        const res = await fetch(request)
         if (res.ok) cache.put(request, res.clone())
         return res
-      }).catch(() => null)
-      return cached || networkPromise || new Response('Offline', { status: 503 })
-    })
+      } catch {
+        return new Response('Offline', { status: 503 })
+      }
+    })()
   )
 })

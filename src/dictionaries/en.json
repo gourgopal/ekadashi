@@ -37,7 +37,7 @@
   },
   "tracker": {
     "title": "Naam Jaap Tracker",
-    "subtitle": "Hare Krishna Mahā-mantra",
+    "subtitle": "Hare Krishna Maha-mantra",
     "tap_zone": "Tap to Chant",
     "beads": "Beads",
     "rounds": "Rounds",
@@ -47,7 +47,13 @@
     "reset_confirm": "Reset your count for today?",
     "yes": "Yes, reset",
     "cancel": "Cancel",
-    "mahamantra": "Hare Krishna Hare Krishna Krishna Krishna Hare Hare | Hare Rama Hare Rama Rama Rama Hare Hare"
+    "mahamantra": "Hare Krishna Hare Krishna Krishna Krishna Hare Hare | Hare Rama Hare Rama Rama Rama Hare Hare",
+    "reminder_title": "Daily Reminder",
+    "set_reminder": "Set Reminder",
+    "reminder_time": "Reminder Time",
+    "reminder_set": "Daily reminder set for",
+    "reminder_off": "Reminder Off",
+    "notifications_off": "Enable notifications in browser settings"
   },
   "resources": {
     "title": "Spiritual Resources",
