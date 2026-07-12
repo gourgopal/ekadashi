@@ -15,18 +15,13 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: 'portrait',
     categories: ['lifestyle', 'religion', 'utilities'],
     icons: [
-      {
-        src: '/icons/icon-192.png',
-        sizes: '192x192',
-        type: 'image/png',
-        purpose: 'maskable',
-      },
-      {
-        src: '/icons/icon-512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'any',
-      },
+      ...[48, 72, 96, 128, 144, 152].flatMap((s) => [
+        { src: `/icons/icon-${s}.png`, sizes: `${s}x${s}`, type: 'image/png' as const, purpose: 'any' as const },
+      ]),
+      ...[192, 384, 512].flatMap((s) => [
+        { src: `/icons/icon-${s}.png`, sizes: `${s}x${s}`, type: 'image/png' as const, purpose: 'any' as const },
+        { src: `/icons/icon-${s}.png`, sizes: `${s}x${s}`, type: 'image/png' as const, purpose: 'maskable' as const },
+      ]),
     ],
     screenshots: [],
     shortcuts: [
