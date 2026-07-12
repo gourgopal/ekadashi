@@ -1,3 +1,16 @@
 # Cloudflare Pages — SPA Redirect Rules
-# Routes all paths to root for client-side routing fallback
+# Exclude static assets, SW, manifest from the catch-all rewrite
+/sw.js
+/manifest.webmanifest
+/icons/*
+/audio/*
+/_next/static/*
+/favicon.ico
+/file.svg
+/globe.svg
+/window.svg
+/next.svg
+/vercel.svg
+
+# Routes all other paths to root for client-side routing fallback
 /*    /index.html    200
