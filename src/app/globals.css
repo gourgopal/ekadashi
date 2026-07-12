@@ -135,12 +135,11 @@ h4, h5, h6 { font-family: var(--font-serif); }
   animation: pulse-slow 3s ease-in-out infinite;
 }
 
-/* ── Om Symbol Glow ───────────────────────────────────────────────────────── */
+/* ── Saffron Glow (works on both text and SVG) ────────────────────────────── */
 .om-glow {
-  text-shadow:
-    0 0 20px rgba(244, 196, 48, 0.8),
-    0 0 40px rgba(244, 196, 48, 0.5),
-    0 0 80px rgba(244, 196, 48, 0.3);
+  filter: drop-shadow(0 0 20px rgba(244, 196, 48, 0.8))
+          drop-shadow(0 0 40px rgba(244, 196, 48, 0.5))
+          drop-shadow(0 0 80px rgba(244, 196, 48, 0.3));
 }
 
 /* ── Countdown Segment ────────────────────────────────────────────────────── */

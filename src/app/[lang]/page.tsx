@@ -4,6 +4,7 @@ import { locales, isValidLocale, defaultLocale, type Locale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/get-dictionary'
 import ekadashiData from '@/data/ekadashi.json'
 import EkadashiCountdown from '@/components/EkadashiCountdown'
+import TilakIcon from '@/components/TilakIcon'
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }))
@@ -70,13 +71,10 @@ export default async function HomePage({
           }}
         />
 
-        {/* Om Symbol */}
-        <div
-          className="text-8xl sm:text-9xl mb-6 animate-float om-glow select-none"
-          style={{ color: '#F4C430', fontFamily: 'serif', lineHeight: 1 }}
-          aria-hidden="true"
-        >
-          ॐ
+        {/* Tilak Icon */}
+        <div className="mb-6 animate-float om-glow select-none flex justify-center" aria-hidden="true">
+          <span className="inline-block sm:hidden"><TilakIcon size={96} /></span>
+          <span className="hidden sm:inline-block"><TilakIcon size={128} /></span>
         </div>
 
         {/* Hero Text */}

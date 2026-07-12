@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { type Locale, locales, localeLabels } from '@/lib/i18n'
 import type { Dictionary } from '@/lib/get-dictionary'
+import TilakIcon from '@/components/TilakIcon'
 
 interface NavigationProps {
   lang: Locale
@@ -44,13 +45,7 @@ export default function Navigation({ lang, dict }: NavigationProps) {
             className="flex items-center gap-3 group"
             id="nav-logo"
           >
-            <span
-              className="text-3xl om-glow select-none"
-              aria-hidden="true"
-              style={{ fontFamily: 'serif', color: '#F4C430', lineHeight: 1 }}
-            >
-              ॐ
-            </span>
+            <TilakIcon size={32} className="om-glow" />
             <div className="leading-tight">
               <div
                 className="text-sm font-bold tracking-wide"

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
+import TilakIcon from '@/components/TilakIcon'
 
 interface KirtanPlayerProps {
   nowPlayingLabel: string
@@ -59,13 +60,13 @@ export default function KirtanPlayer({
       </audio>
 
       <div className="max-w-7xl mx-auto flex items-center gap-4">
-        {/* Om icon */}
+        {/* Tilak icon */}
         <span
-          className={`text-xl select-none ${isPlaying ? 'animate-pulse-slow' : ''}`}
-          style={{ color: '#F4C430' }}
+          className={`flex-shrink-0 ${isPlaying ? 'animate-pulse-slow' : ''}`}
+          style={{ color: '#F4C430', lineHeight: 1 }}
           aria-hidden="true"
         >
-          ॐ
+          <TilakIcon size={20} />
         </span>
 
         {/* Play / Pause button */}
