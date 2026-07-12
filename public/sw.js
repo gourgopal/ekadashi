@@ -15,7 +15,7 @@ const PRECACHE_URLS = [
   '/hi/calendar/',
   '/hi/tracker/',
   '/hi/resources/',
-  '/manifest.json',
+  '/manifest.webmanifest',
 ]
 
 // ── Install: pre-cache key pages ──────────────────────────────────────────
