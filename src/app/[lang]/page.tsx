@@ -65,7 +65,9 @@ export default async function HomePage({
             position: 'absolute',
             top: '10%', left: '50%',
             transform: 'translateX(-50%)',
-            width: '600px', height: '400px',
+            maxWidth: '600px',
+            width: '100%',
+            height: '400px',
             background: 'radial-gradient(ellipse, rgba(244,196,48,0.12) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
