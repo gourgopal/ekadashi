@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ekadashi-v5'
+const CACHE_NAME = 'ekadashi-v6'
 
 const PUSH_WORKER = 'https://ekadashi-push.gourgopal.workers.dev'
 

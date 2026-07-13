@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { type Locale, locales, localeLabels } from '@/lib/i18n'
 import type { Dictionary } from '@/lib/get-dictionary'
 import TilakIcon from '@/components/TilakIcon'
+import NotificationBell from '@/components/NotificationBell'
 
 interface NavigationProps {
   lang: Locale
@@ -83,8 +84,10 @@ export default function Navigation({ lang, dict }: NavigationProps) {
             ))}
           </div>
 
-          {/* Language switcher + hamburger */}
-          <div className="flex items-center gap-3">
+          {/* Language switcher + notifications + hamburger */}
+          <div className="flex items-center gap-1">
+            <NotificationBell />
+
             {/* Language picker */}
             <div className="relative">
               <button
