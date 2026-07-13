@@ -15,6 +15,15 @@ interface PushSub {
   keys: { p256dh: string; auth: string }
 }
 
+interface Alert {
+  title: string
+  body: string
+  tag: string
+  icon: string
+  badge: string
+  vibrate: number[]
+}
+
 // ── Base64 utils ───────────────────────────────────────────────────────
 
 function b64UrlToBytes(str: string): Uint8Array {
@@ -34,8 +43,8 @@ function strToBytes(s: string): Uint8Array {
 // ── VAPID ──────────────────────────────────────────────────────────────
 
 async function importVapidKey(privB64: string, pubB64: string): Promise<CryptoKey> {
-  const priv = b64UrlToBytes(privB64)       // 32 raw bytes
-  const pub = b64UrlToBytes(pubB64)          // 65 raw bytes: 0x04 || x(32) || y(32)
+  const priv = b64UrlToBytes(privB64)
+  const pub = b64UrlToBytes(pubB64)
   const x = bytesToB64Url(pub.slice(1, 33))
   const y = bytesToB64Url(pub.slice(33, 65))
   const d = bytesToB64Url(priv)
@@ -52,75 +61,18 @@ async function createVapidJWT(endpoint: string, privKeyB64: string, pubKeyB64: s
   return { jwt: `${header}.${payload}.${bytesToB64Url(sig)}`, pubKeyB64 }
 }
 
-// ── Encryption ─────────────────────────────────────────────────────────
+// ── Send empty push (no encryption needed) ─────────────────────────────
 
-async function hmac(key: Uint8Array, data: Uint8Array): Promise<Uint8Array> {
-  const k = await crypto.subtle.importKey('raw', key, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
-  return new Uint8Array(await crypto.subtle.sign('HMAC', k, data))
-}
-
-async function encryptPayload(payload: string, sub: PushSub): Promise<{ body: Uint8Array; salt: string; pubKey: string }> {
-  const salt = crypto.getRandomValues(new Uint8Array(16))
-  const serverKeys = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveBits'])
-  // Import client's p256dh key (raw uncompressed 65-byte format) as JWK
-  const rawP256dh = b64UrlToBytes(sub.keys.p256dh)
-  const clientPub = await crypto.subtle.importKey('jwk', {
-    kty: 'EC', crv: 'P-256',
-    x: bytesToB64Url(rawP256dh.slice(1, 33)),
-    y: bytesToB64Url(rawP256dh.slice(33, 65)),
-    ext: true,
-  }, { name: 'ECDH', namedCurve: 'P-256' }, true, [])
-  const shared = new Uint8Array(await crypto.subtle.deriveBits({ name: 'ECDH', public: clientPub }, serverKeys.privateKey, 256))
-  const auth = b64UrlToBytes(sub.keys.auth)
-  // Export server public key as raw uncompressed format (matching client's format)
-  const serverJwk = await crypto.subtle.exportKey('jwk', serverKeys.publicKey) as any
-  const serverPubRaw = new Uint8Array(65)
-  serverPubRaw[0] = 0x04
-  serverPubRaw.set(b64UrlToBytes(serverJwk.x), 1)
-  serverPubRaw.set(b64UrlToBytes(serverJwk.y), 33)
-
-  // PRK = HMAC-SHA256(auth_secret, shared_secret) per RFC 8291
-  const prk = await hmac(auth, shared)
-
-  // CEK = HKDF-Expand(PRK, "Content-Encoding: aes128gcm", 16)
-  //     = HMAC-SHA256(PRK, "Content-Encoding: aes128gcm" || 0x01).slice(0, 16)
-  const cekInfo = new Uint8Array([...strToBytes('Content-Encoding: aes128gcm'), 0x01])
-  const cekPrk = await hmac(prk, cekInfo)
-  const cek = cekPrk.slice(0, 16)
-
-  // Nonce = HKDF-Expand(PRK, "Content-Encoding: nonce", 12)
-  //       = HMAC-SHA256(PRK, "Content-Encoding: nonce" || 0x01).slice(0, 12)
-  const nonceInfo = new Uint8Array([...strToBytes('Content-Encoding: nonce'), 0x01])
-  const noncePrk = await hmac(prk, nonceInfo)
-  const nonce = noncePrk.slice(0, 12)
-
-  const plaintext = new Uint8Array([0, ...strToBytes(payload), 1])
-  const encKey = await crypto.subtle.importKey('raw', cek, { name: 'AES-GCM' }, false, ['encrypt'])
-  const encrypted = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: nonce, additionalData: new Uint8Array(0), tagLength: 128 }, encKey, plaintext))
-
-  // Build aes128gcm record: salt(16) || recordSize(4) || pubKeyLen(1) || pubKey(variable) || ciphertext
-  const recordSize = new Uint8Array([0x00, 0x00, 0x10, 0x00]) // 4096
-  const body = new Uint8Array([...salt, ...recordSize, serverPubRaw.length, ...serverPubRaw, ...encrypted])
-
-  return { body, salt: bytesToB64Url(salt), pubKey: bytesToB64Url(serverPubRaw) }
-}
-
-// ── Send push via fetch ────────────────────────────────────────────────
-
-async function sendPush(sub: PushSub, payload: string, env: Env): Promise<void> {
+async function sendEmptyPush(sub: PushSub, env: Env): Promise<void> {
   if (!env.VAPID_PRIVATE_KEY) throw new Error('VAPID_PRIVATE_KEY not set')
-  const enc = await encryptPayload(payload, sub)
   const vapidPubB64 = bytesToB64Url(b64UrlToBytes(env.VAPID_PUBLIC_KEY))
   const vapid = await createVapidJWT(sub.endpoint, env.VAPID_PRIVATE_KEY, vapidPubB64, env.VAPID_SUBJECT)
   const resp = await fetch(sub.endpoint, {
     method: 'POST',
     headers: {
-      'Content-Encoding': 'aes128gcm',
-      'Crypto-Key': `dh=${enc.pubKey}; p256ecdsa=${vapid.pubKeyB64}`,
       'Authorization': `vapid t=${vapid.jwt}, k=${vapid.pubKeyB64}`,
       'TTL': '86400',
     },
-    body: enc.body,
   })
   if (resp.status === 410) throw { statusCode: 410, message: 'Subscription expired' }
   if (!resp.ok) throw new Error(`Push failed: ${resp.status} ${await resp.text().catch(() => '')}`)
@@ -135,33 +87,37 @@ function diffDays(a: string, b: string): number {
   return Math.round((new Date(a).getTime() - new Date(b).getTime()) / 86400000)
 }
 
-function getEkadashiAlerts(ekadashis: EkadashiEntry[], today: string): Array<{ title: string; body: string; tag: string }> {
-  const out: Array<{ title: string; body: string; tag: string }> = []
+function mkAlert(title: string, body: string, tag: string): Alert {
+  return { title, body, tag, icon: '/icons/icon-192.png', badge: '/icons/badge.svg', vibrate: [200, 100, 200] }
+}
+
+function getEkadashiAlerts(ekadashis: EkadashiEntry[], today: string): Alert[] {
+  const out: Alert[] = []
   for (const e of ekadashis) {
     const d = diffDays(e.date, today)
-    if (d === 4) out.push({ title: `📿 ${e.name} in 3 Days`, body: `Prepare for ${e.name} (${e.paksha} Paksha, ${e.month}).`, tag: `ek:4:${e.date}` })
-    if (d === 3) out.push({ title: `📿 ${e.name} in 2 Days`, body: `${e.name} is approaching. Review fasting rules.`, tag: `ek:3:${e.date}` })
-    if (d === 2) out.push({ title: `🕐 ${e.name} Tomorrow`, body: `Tomorrow is ${e.name}! Parana: ${e.parana_start} – ${e.parana_end}.`, tag: `ek:2:${e.date}` })
-    if (d === 1) out.push({ title: `📿 ${e.name} Tomorrow`, body: `No grains or legumes tomorrow. Fruits, milk, nuts permitted.`, tag: `ek:1:${e.date}` })
-    if (d === 0) out.push({ title: `🪔 Today is ${e.name}!`, body: `Fast today. Break fast: ${e.parana_start} – ${e.parana_end}. ${e.significance}`, tag: `ek:0:${e.date}` })
-    if (d === -1) out.push({ title: `🌅 Parana Time — ${e.name}`, body: `Break your fast: ${e.parana_start} – ${e.parana_end}.`, tag: `ek:-1:${e.date}` })
+    if (d === 4) out.push(mkAlert(`📿 ${e.name} in 3 Days`, `Prepare for ${e.name} (${e.paksha} Paksha, ${e.month}).`, `ek:4:${e.date}`))
+    if (d === 3) out.push(mkAlert(`📿 ${e.name} in 2 Days`, `${e.name} is approaching. Review fasting rules.`, `ek:3:${e.date}`))
+    if (d === 2) out.push(mkAlert(`🕐 ${e.name} Tomorrow`, `Tomorrow is ${e.name}! Parana: ${e.parana_start} – ${e.parana_end}.`, `ek:2:${e.date}`))
+    if (d === 1) out.push(mkAlert(`📿 ${e.name} Tomorrow`, `No grains or legumes tomorrow. Fruits, milk, nuts permitted.`, `ek:1:${e.date}`))
+    if (d === 0) out.push(mkAlert(`🪔 Today is ${e.name}!`, `Fast today. Break fast: ${e.parana_start} – ${e.parana_end}. ${e.significance}`, `ek:0:${e.date}`))
+    if (d === -1) out.push(mkAlert(`🌅 Parana Time — ${e.name}`, `Break your fast: ${e.parana_start} – ${e.parana_end}.`, `ek:-1:${e.date}`))
   }
   return out
 }
 
-function getFestivalAlerts(festivals: FestivalEntry[], today: string): Array<{ title: string; body: string; tag: string }> {
-  const out: Array<{ title: string; body: string; tag: string }> = []
+function getFestivalAlerts(festivals: FestivalEntry[], today: string): Alert[] {
+  const out: Alert[] = []
   for (const f of festivals) {
     const d = diffDays(f.date, today)
-    if (d === 1) out.push({ title: `⏰ ${f.name} Tomorrow`, body: f.desc, tag: `ft:1:${f.date}` })
-    if (d === 0) out.push({ title: `${f.emoji} ${f.name} Today!`, body: f.desc, tag: `ft:0:${f.date}` })
+    if (d === 1) out.push(mkAlert(`⏰ ${f.name} Tomorrow`, f.desc, `ft:1:${f.date}`))
+    if (d === 0) out.push(mkAlert(`${f.emoji} ${f.name} Today!`, f.desc, `ft:0:${f.date}`))
   }
   return out
 }
 
-function getJaapAlerts(today: string, time: string): Array<{ title: string; body: string; tag: string }> {
+function getJaapAlerts(today: string, time: string): Alert[] {
   const label = time < '12:00' ? '🌅 Morning' : '🌇 Evening'
-  return [{ title: `${label} Jaap Reminder`, body: 'Time for your Hare Krishna Maha-mantra japa rounds!', tag: `jp:${today}:${time}` }]
+  return [mkAlert(`${label} Jaap Reminder`, 'Time for your Hare Krishna Maha-mantra japa rounds!', `jp:${today}:${time}`)]
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────
@@ -178,6 +134,8 @@ function json(data: unknown, status = 200): Response {
 
 const DEFAULT_PREFS = { jaapMorning: true, jaapEvening: true, jaapMorningTime: '06:00', jaapEveningTime: '18:00', ekadashiReminders: true, festivalReminders: true, remindersBeforeDays: 4 }
 
+const CURRENT_ALERTS_KEY = 'current_alerts'
+
 // ── Main handler ───────────────────────────────────────────────────────
 
 export default {
@@ -188,6 +146,12 @@ export default {
     // GET /vapid-public-key
     if (url.pathname === '/vapid-public-key') {
       return json({ key: env.VAPID_PUBLIC_KEY })
+    }
+
+    // GET /current-alerts — SW fetches this on empty push
+    if (url.pathname === '/current-alerts') {
+      const raw = await env.NOTIFICATION_LOG.get(CURRENT_ALERTS_KEY)
+      return json(raw ? JSON.parse(raw) : [])
     }
 
     // POST /subscribe
@@ -224,16 +188,21 @@ export default {
       })
     }
 
-    // GET /test — send test to all subscribers
+    // GET /test — send test notification (no encryption)
     if (url.pathname === '/test') {
       if (url.searchParams.get('secret') !== env.CRON_SECRET) return json({ error: 'Unauthorized' }, 401)
       if (!env.VAPID_PRIVATE_KEY) return json({ error: 'VAPID_PRIVATE_KEY not set' }, 500)
 
-      const testPayload = JSON.stringify({
-        title: '🔔 Test Notification', body: 'Hare Krishna! Push working ✅',
-        tag: 'test-' + Date.now(), icon: '/icons/icon-192.png', badge: '/icons/icon-192.png',
+      const testAlert: Alert = {
+        title: '🔔 Test Notification',
+        body: 'Hare Krishna! Push working ✅',
+        tag: 'test-' + Date.now(),
+        icon: '/icons/icon-192.png',
+        badge: '/icons/badge.svg',
         vibrate: [200, 100, 200],
-      })
+      }
+      await env.NOTIFICATION_LOG.put(CURRENT_ALERTS_KEY, JSON.stringify([testAlert]))
+
       let sent = 0
       const errors: string[] = []
       const subs = await env.SUBSCRIPTIONS.list({ prefix: 'sub:' })
@@ -242,7 +211,7 @@ export default {
         const raw = await env.SUBSCRIPTIONS.get(name)
         if (!raw) continue
         try {
-          await sendPush(JSON.parse(raw) as PushSub, testPayload, env)
+          await sendEmptyPush(JSON.parse(raw) as PushSub, env)
           sent++
         } catch (err: any) {
           if (err.statusCode === 410) {
@@ -253,10 +222,12 @@ export default {
           }
         }
       }
+
+      setTimeout(() => env.NOTIFICATION_LOG.delete(CURRENT_ALERTS_KEY).catch(() => {}), 0)
       return json({ sent, subscribers: subs.keys.length, errors: errors.length ? errors : undefined })
     }
 
-    // GET /test-ping — send EMPTY push (no encryption) to test if push reaches browser
+    // GET /test-ping — send EMPTY push (no encryption, no KV)
     if (url.pathname === '/test-ping') {
       if (url.searchParams.get('secret') !== env.CRON_SECRET) return json({ error: 'Unauthorized' }, 401)
       if (!env.VAPID_PRIVATE_KEY) return json({ error: 'VAPID_PRIVATE_KEY not set' }, 500)
@@ -270,19 +241,10 @@ export default {
         if (!raw) continue
         const sub: PushSub = JSON.parse(raw)
         try {
-          const vapidPubB64 = bytesToB64Url(b64UrlToBytes(env.VAPID_PUBLIC_KEY))
-          const vapid = await createVapidJWT(sub.endpoint, env.VAPID_PRIVATE_KEY, vapidPubB64, env.VAPID_SUBJECT)
-          const resp = await fetch(sub.endpoint, {
-            method: 'POST',
-            headers: {
-              'Authorization': `vapid t=${vapid.jwt}, k=${vapid.pubKeyB64}`,
-              'TTL': '86400',
-            },
-          })
-          if (resp.status === 410) { await env.SUBSCRIPTIONS.delete(name); errors.push(`${name.slice(0, 12)}...: unsubscribed (410)`); continue }
-          if (resp.ok) sent++
-          else errors.push(`${name.slice(0, 12)}...: HTTP ${resp.status}`)
+          await sendEmptyPush(sub, env)
+          sent++
         } catch (err: any) {
+          if (err.statusCode === 410) { await env.SUBSCRIPTIONS.delete(name); errors.push(`${name.slice(0, 12)}...: unsubscribed (410)`); continue }
           errors.push(`${name.slice(0, 12)}...: ${err.message || err}`)
         }
       }
@@ -315,6 +277,8 @@ export default {
       const newAlerts = allAlerts.filter(a => !sentTags.has(a.tag))
       if (newAlerts.length === 0) return json({ sent: 0, reason: 'nothing_new' })
 
+      await env.NOTIFICATION_LOG.put(CURRENT_ALERTS_KEY, JSON.stringify(newAlerts))
+
       let sentCount = 0, removedCount = 0
       const subs = await env.SUBSCRIPTIONS.list({ prefix: 'sub:' })
 
@@ -333,14 +297,11 @@ export default {
         })
         if (userAlerts.length === 0) continue
 
-        for (const alert of userAlerts) {
-          try {
-            const payload = JSON.stringify({ title: alert.title, body: alert.body, tag: alert.tag, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png', vibrate: [200, 100, 200] })
-            await sendPush(sub, payload, env)
-            sentCount++
-          } catch (err: any) {
-            if (err.statusCode === 410) { await env.SUBSCRIPTIONS.delete(name); removedCount++ }
-          }
+        try {
+          await sendEmptyPush(sub, env)
+          sentCount++
+        } catch (err: any) {
+          if (err.statusCode === 410) { await env.SUBSCRIPTIONS.delete(name); removedCount++ }
         }
       }
 

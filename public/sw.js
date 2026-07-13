@@ -1,5 +1,7 @@
 const CACHE_NAME = 'ekadashi-v5'
 
+const PUSH_WORKER = 'https://ekadashi-push.gourgopal.workers.dev'
+
 self.addEventListener('install', () => self.skipWaiting())
 
 self.addEventListener('activate', (event) => {
@@ -10,32 +12,59 @@ self.addEventListener('activate', (event) => {
   )
 })
 
-// ── Push event: show notification from payload ─────────────────────────
+// ── Push event: fetch alerts from worker (no encryption needed) ────────
 self.addEventListener('push', (event) => {
-  let data = null
-  try {
-    if (event.data) data = event.data.json()
-  } catch { /* ignore */ }
-
-  console.log('[SW] Push received:', data?.tag)
   event.waitUntil(
     (async () => {
-      const title = data?.title || 'Hare Krishna!'
-      const body = data?.body || 'Tap to open Ekadashi Vrat'
-      const tag = data?.tag || 'push-' + Date.now()
-      const icon = data?.icon || '/icons/icon-192.png'
-      const options = {
-        body,
-        tag,
-        icon,
-        badge: data?.badge || '/icons/icon-192.png',
-        vibrate: [200, 100, 200],
-        data: { url: '/' },
-        requireInteraction: true,
-        silent: false,
+      // First try encrypted data (legacy, in case it arrives)
+      let data = null
+      try {
+        if (event.data) data = event.data.json()
+      } catch { /* ignore */ }
+
+      // Fetch current alerts from the worker (works for empty pushes too)
+      let alerts = null
+      try {
+        const resp = await fetch(`${PUSH_WORKER}/current-alerts`)
+        if (resp.ok) alerts = await resp.json()
+      } catch { /* fall through */ }
+
+      if (alerts?.length) {
+        for (const a of alerts) {
+          await self.registration.showNotification(a.title || 'Hare Krishna!', {
+            body: a.body || 'Tap to open Ekadashi Vrat',
+            tag: a.tag || 'push-' + Date.now(),
+            icon: a.icon || '/icons/icon-192.png',
+            badge: a.badge || '/icons/badge.svg',
+            vibrate: a.vibrate || [200, 100, 200],
+            requireInteraction: true,
+          })
+        }
+        return
       }
-      if (data?.image) options.image = data.image
-      await self.registration.showNotification(title, options)
+
+      // Fallback: show data from encrypted push payload
+      if (data) {
+        await self.registration.showNotification(data.title || 'Hare Krishna!', {
+          body: data.body || 'Tap to open Ekadashi Vrat',
+          tag: data.tag || 'push-' + Date.now(),
+          icon: data.icon || '/icons/icon-192.png',
+          badge: data.badge || '/icons/badge.svg',
+          vibrate: [200, 100, 200],
+          requireInteraction: true,
+        })
+        return
+      }
+
+      // Final fallback: show generic notification
+      await self.registration.showNotification('Hare Krishna!', {
+        body: 'Tap to open Ekadashi Vrat',
+        tag: 'push-' + Date.now(),
+        icon: '/icons/icon-192.png',
+        badge: '/icons/badge.svg',
+        vibrate: [200, 100, 200],
+        requireInteraction: true,
+      })
     })()
   )
 })
