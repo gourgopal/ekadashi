@@ -255,6 +255,39 @@ export default {
       return json({ sent, subscribers: subs.keys.length, errors: errors.length ? errors : undefined })
     }
 
+    // GET /test-ping — send EMPTY push (no encryption) to test if push reaches browser
+    if (url.pathname === '/test-ping') {
+      if (url.searchParams.get('secret') !== env.CRON_SECRET) return json({ error: 'Unauthorized' }, 401)
+      if (!env.VAPID_PRIVATE_KEY) return json({ error: 'VAPID_PRIVATE_KEY not set' }, 500)
+
+      let sent = 0
+      const errors: string[] = []
+      const subs = await env.SUBSCRIPTIONS.list({ prefix: 'sub:' })
+
+      for (const { name } of subs.keys) {
+        const raw = await env.SUBSCRIPTIONS.get(name)
+        if (!raw) continue
+        const sub: PushSub = JSON.parse(raw)
+        try {
+          const vapidPubB64 = bytesToB64Url(b64UrlToBytes(env.VAPID_PUBLIC_KEY))
+          const vapid = await createVapidJWT(sub.endpoint, env.VAPID_PRIVATE_KEY, vapidPubB64, env.VAPID_SUBJECT)
+          const resp = await fetch(sub.endpoint, {
+            method: 'POST',
+            headers: {
+              'Authorization': `vapid t=${vapid.jwt}, k=${vapid.pubKeyB64}`,
+              'TTL': '86400',
+            },
+          })
+          if (resp.status === 410) { await env.SUBSCRIPTIONS.delete(name); errors.push(`${name.slice(0, 12)}...: unsubscribed (410)`); continue }
+          if (resp.ok) sent++
+          else errors.push(`${name.slice(0, 12)}...: HTTP ${resp.status}`)
+        } catch (err: any) {
+          errors.push(`${name.slice(0, 12)}...: ${err.message || err}`)
+        }
+      }
+      return json({ sent, subscribers: subs.keys.length, errors: errors.length ? errors : undefined })
+    }
+
     // GET /cron — daily notification check
     if (url.pathname === '/cron') {
       if (url.searchParams.get('secret') !== env.CRON_SECRET) return json({ error: 'Unauthorized' }, 401)
