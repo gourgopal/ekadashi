@@ -24,7 +24,7 @@ function png(w, h, px) {
   return Buffer.concat([sig, chunk('IHDR', ihdr), chunk('IDAT', z), chunk('IEND', Buffer.alloc(0))]);
 }
 
-// Render at 8x then downscale for extreme AA
+// Render at 8x then downscale for AA
 const S = 8, N = 96, R = N * S;
 const px = new Uint8Array(R * R * 4);
 
@@ -41,54 +41,69 @@ function fill(x, y, r) {
   }
 }
 
-function rect(cx, cy, w, h, rx) {
-  // Rounded rectangle via super-sampling
-  const hl = w/2, vl = h/2;
-  for (let y = cy - vl - rx; y <= cy + vl + rx; y++) for (let x = cx - hl - rx; x <= cx + hl + rx; x++) {
-    if (x < 0 || x >= R || y < 0 || y >= R) continue;
-    const dx = Math.abs(x - cx) - hl + rx;
-    const dy = Math.abs(y - cy) - vl + rx;
-    const d = dx > 0 && dy > 0 ? Math.sqrt(dx*dx + dy*dy) : Math.max(dx, dy, 0);
-    if (d > rx) continue;
-    const i = (y * R + x) * 4;
-    const a = Math.round(Math.max(0, Math.min(255, (rx - d) * 255 / rx)));
-    if (a > px[i + 3]) { px[i] = 255; px[i + 1] = 255; px[i + 2] = 255; px[i + 3] = a; }
+// Evaluate cubic bezier at t
+function cbez(t, p0, p1, p2, p3) {
+  const u = 1 - t;
+  return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3;
+}
+
+// Draw a tapered thick curve along a cubic bezier path
+function taper(x0, y0, x1, y1, x2, y2, x3, y3, w0, w1, steps = 120) {
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const cx = cbez(t, x0, x1, x2, x3);
+    const cy = cbez(t, y0, y1, y2, y3);
+    const w = w0 * (1 - t*t) + w1 * t*t;
+    fill(cx, cy, w / 2);
   }
 }
 
-// ===== BOLD, CLEAN TILAK =====
-// Using thick shapes that are recognizable at small sizes
+// ===== BOLD TILAK with curved lines =====
+// Two thick vertical strokes with gentle outward curve, tapering at bottom
 
-// Left line: tall rounded rect, slightly tapered
-const lx = 33, rw = 7.5;
-// Upper segment
-rect(lx, 36, rw, 50, 3.5);
-// Lower taper
-for (let y = 60; y < 80; y++) {
-  const t = (y - 60) / 20;
-  const w2 = rw * (1 - t * 0.35);
-  fill(lx, y, w2 / 2);
+// Left line — bolder, wider
+taper(
+  33*S, 16*S,  // top center
+  29*S, 38*S,  // control 1 (outward)
+  29*S, 60*S,  // control 2
+  33*S, 84*S,  // bottom center
+  14*S, 7*S    // width at top, width at bottom
+);
+
+// Right line — mirror
+taper(
+  63*S, 16*S,
+  67*S, 38*S,
+  67*S, 60*S,
+  63*S, 84*S,
+  14*S, 7*S
+);
+
+// Tulsi leaf at top — thick pointed oval shape
+// Left half: sweep from center to left edge
+for (let i = 0; i <= 80; i++) {
+  const t = i / 80;
+  const lx = cbez(t, 48*S, 38*S, 34*S, 34*S);
+  const ly = cbez(t, 18*S, 8*S, 8*S, 18*S);
+  fill(lx, ly, 8*S);
 }
-
-// Right line
-const rx2 = 63;
-rect(rx2, 36, rw, 50, 3.5);
-for (let y = 60; y < 80; y++) {
-  const t = (y - 60) / 20;
-  const w2 = rw * (1 - t * 0.35);
-  fill(rx2, y, w2 / 2);
+// Right half
+for (let i = 0; i <= 80; i++) {
+  const t = i / 80;
+  const lx = cbez(t, 48*S, 58*S, 62*S, 62*S);
+  const ly = cbez(t, 18*S, 8*S, 8*S, 18*S);
+  fill(lx, ly, 8*S);
 }
-
-// Tulsi leaf at top: diamond/oval shape
-for (let y = 10; y <= 32; y++) {
-  const t = (y - 10) / 22;
-  // Leaf width varies from 0 at tip to max at center to 0 at bottom
-  const lw = Math.sin(t * Math.PI) * 20;
-  fill(48, y, lw / 2);
+// Fill leaf center area
+for (let i = 0; i <= 60; i++) {
+  const t = i / 60;
+  const lx = cbez(t, 48*S, 48*S, 48*S, 48*S);
+  const ly = cbez(t, 16*S, 10*S, 10*S, 16*S);
+  fill(lx, ly, 10*S);
 }
 
 // Bindu
-fill(48, 5, 3.2);
+fill(48*S, 5*S, 5*S);
 
 // ===== DOWNSAMPLE =====
 const out = Buffer.alloc(N * N * 4);
@@ -102,29 +117,29 @@ for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
   if (c) { out[o] = r / c; out[o+1] = g / c; out[o+2] = b / c; out[o+3] = a / c; }
 }
 writeFileSync('public/icons/badge.png', png(N, N, out));
-console.log('badge.png generated (8x supersampled)');
+console.log('badge.png generated (bold tilak)');
 
 // ===== LANDSCAPE BANNER =====
 const W = 1200, H = 600;
 const bp = Buffer.alloc(W * H * 4);
 
-// Saffron gradient with subtle vignette
+// Saffron gradient — warm orange to golden
 for (let y = 0; y < H; y++) {
   const t = y / H;
-  const rr = Math.round(245 - t * 15 + Math.sin(y * 0.005) * 3);
-  const gg = Math.round(140 + t * 35 + Math.sin(y * 0.005) * 2);
+  const rr = Math.round(245 - t * 15 + Math.sin(y * 0.003) * 4);
+  const gg = Math.round(140 + t * 35 + Math.sin(y * 0.003) * 3);
   const bb = Math.round(25 + t * 15);
   for (let x = 0; x < W; x++) {
     const i = (y * W + x) * 4;
-    const vignette = 1 - 0.2 * Math.abs(x / W - 0.5) * 2;
-    bp[i] = Math.round(rr * vignette);
-    bp[i+1] = Math.round(gg * vignette);
-    bp[i+2] = Math.round(bb * vignette);
+    const vy = 1 - 0.15 * Math.abs(x / W - 0.5) * 2;
+    bp[i] = Math.round(rr * vy);
+    bp[i+1] = Math.round(gg * vy);
+    bp[i+2] = Math.round(bb * vy);
     bp[i+3] = 255;
   }
 }
 
-// Large tilak watermark
+// Bold tilak watermark
 function wdot(x, y, r, a) {
   for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
     const d = Math.sqrt(dx*dx + dy*dy);
@@ -142,28 +157,41 @@ function wdot(x, y, r, a) {
   }
 }
 
-// Bold watermark tilak in center
-const mX = W / 2;
+// Bold watermark tilak
+const mX = W/2, s = 1.2;
 // Left line
-for (let y = 100; y < 460; y++) {
-  const t = (y - 100) / 360;
-  const w2 = 28 * (1 - t * 0.3);
-  wdot(mX - 60, y, w2, 25);
+for (let i = 0; i <= 80; i++) {
+  const t = i / 80;
+  const lx = cbez(t, mX - 50*s, mX - 50*s - 20*s, mX - 50*s - 20*s, mX - 50*s);
+  const ly = cbez(t, 30*s, 30*s + 100*s, 30*s + 200*s, 30*s + 340*s);
+  const w = 30*s - 15*s * t*t;
+  wdot(lx, ly, w * 0.5, 28);
 }
 // Right line
-for (let y = 100; y < 460; y++) {
-  const t = (y - 100) / 360;
-  const w2 = 28 * (1 - t * 0.3);
-  wdot(mX + 60, y, w2, 25);
+for (let i = 0; i <= 80; i++) {
+  const t = i / 80;
+  const lx = cbez(t, mX + 50*s, mX + 50*s + 20*s, mX + 50*s + 20*s, mX + 50*s);
+  const ly = cbez(t, 30*s, 30*s + 100*s, 30*s + 200*s, 30*s + 340*s);
+  const w = 30*s - 15*s * t*t;
+  wdot(lx, ly, w * 0.5, 28);
 }
 // Leaf
-for (let y = 45; y <= 140; y++) {
-  const t = (y - 45) / 95;
-  const lw = Math.sin(t * Math.PI) * 50;
-  wdot(mX, y, lw / 2, 25);
+for (let i = 0; i <= 60; i++) {
+  const t = i / 60;
+  const lx = cbez(t, mX, mX - 60*s, mX - 80*s, mX - 80*s);
+  const ly = cbez(t, 30*s - 30*s, 30*s - 50*s, 30*s - 50*s, 30*s - 30*s + 30*s);
+  wdot(lx, ly, 15*s, 28);
+  const rx = cbez(t, mX, mX + 60*s, mX + 80*s, mX + 80*s);
+  wdot(rx, ly, 15*s, 28);
+}
+// Leaf fill
+for (let i = 0; i <= 40; i++) {
+  const t = i / 40;
+  const ly = cbez(t, 30*s - 30*s, 30*s - 15*s, 30*s - 15*s, 30*s);
+  wdot(mX, ly, 25*s, 28);
 }
 // Bindu
-wdot(mX, 28, 12, 25);
+wdot(mX, 30*s - 45*s, 10*s, 28);
 
 writeFileSync('public/icons/notification-banner.png', png(W, H, bp));
 console.log('notification-banner.png generated');
