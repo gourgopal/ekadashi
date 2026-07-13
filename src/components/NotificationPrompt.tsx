@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { requestPermission, subscribeToPush, hasPermission, isPushSubscribed } from '@/lib/notifications'
+import { requestPermission, subscribeToPush } from '@/lib/notifications'
 
 const PROMPT_KEY = 'ekadashi_notif_prompted'
 
@@ -18,6 +18,8 @@ interface NotificationPromptProps {
 export default function NotificationPrompt({ labels }: NotificationPromptProps) {
   const [visible, setVisible] = useState(false)
   const [thanks, setThanks] = useState(false)
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
 
   useEffect(() => {
     const prompted = localStorage.getItem(PROMPT_KEY)
@@ -27,14 +29,29 @@ export default function NotificationPrompt({ labels }: NotificationPromptProps) 
   }, [])
 
   const handleEnable = async () => {
-    const ok = await requestPermission()
-    localStorage.setItem(PROMPT_KEY, 'true')
-    setVisible(false)
-    if (ok) {
-      await subscribeToPush()
+    setBusy(true)
+    setError('')
+    try {
+      const ok = await requestPermission()
+      if (!ok) {
+        setError('Permission was denied. Check your browser settings.')
+        setBusy(false)
+        return
+      }
+      const subOk = await subscribeToPush()
+      if (!subOk) {
+        setError('Failed to subscribe to push. Check console for details.')
+        setBusy(false)
+        return
+      }
+      localStorage.setItem(PROMPT_KEY, 'true')
+      setVisible(false)
       setThanks(true)
       setTimeout(() => setThanks(false), 3000)
+    } catch (err) {
+      setError('Unexpected error: ' + String(err))
     }
+    setBusy(false)
   }
 
   const handleLater = () => {
@@ -65,12 +82,21 @@ export default function NotificationPrompt({ labels }: NotificationPromptProps) 
             <p className="text-sm mb-6 leading-relaxed" style={{ color: 'rgba(210,180,140,0.8)' }}>
               {labels.message}
             </p>
+
+            {error && (
+              <p className="text-xs mb-4 px-3 py-2 rounded-lg" style={{ color: '#ff6b6b', background: 'rgba(255,0,0,0.1)', border: '1px solid rgba(255,0,0,0.2)' }}>
+                ❌ {error}
+              </p>
+            )}
+
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleEnable}
+                disabled={busy}
                 className="btn-saffron justify-center text-sm w-full"
+                style={busy ? { opacity: 0.6 } : {}}
               >
-                🔔 {labels.enable}
+                {busy ? '⏳ Enabling...' : `🔔 ${labels.enable}`}
               </button>
               <button
                 onClick={handleLater}
