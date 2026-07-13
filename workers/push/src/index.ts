@@ -1,5 +1,4 @@
-/// <reference types="@cloudflare/workers-types" />
-
+import type { ScheduledController } from '@cloudflare/workers-types'
 import webpush from 'web-push'
 
 interface Env {
