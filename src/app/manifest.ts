@@ -8,11 +8,16 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: 'Ekadashi',
     description:
       'Complete Gaudiya Vaishnava Ekadashi calendar with fasting dates, parana times, and Naam Jaap tracker for ISKCON devotees worldwide.',
+    id: '/',
     start_url: '/en/',
+    scope: '/',
     display: 'standalone',
+    display_override: ['window-controls-overlay', 'standalone'],
     background_color: '#0d0a2e',
     theme_color: '#F4C430',
     orientation: 'portrait',
+    lang: 'en',
+    dir: 'ltr',
     categories: ['lifestyle', 'religion', 'utilities'],
     icons: [
       ...[48, 72, 96, 128, 144, 152].flatMap((s) => [

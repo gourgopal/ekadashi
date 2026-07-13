@@ -1,9 +1,4 @@
-/**
- * Ekadashi Vrat — Service Worker
- * Cache-first strategy for static assets + stale-while-revalidate for pages.
- */
-
-const CACHE_NAME = 'ekadashi-v2'
+const CACHE_NAME = 'ekadashi-v3'
 
 const PRECACHE_URLS = [
   '/',
@@ -15,21 +10,40 @@ const PRECACHE_URLS = [
   '/hi/calendar/',
   '/hi/tracker/',
   '/hi/resources/',
+  '/sa/',
+  '/sa/calendar/',
+  '/sa/tracker/',
+  '/sa/resources/',
+  '/ru/',
+  '/ru/calendar/',
+  '/ru/tracker/',
+  '/ru/resources/',
   '/manifest.webmanifest',
 ]
 
-// ── Install: pre-cache key pages ──────────────────────────────────────────
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_URLS).catch((err) => {
-        console.warn('[SW] Pre-cache failed for some URLs:', err)
-      })
-    }).then(() => self.skipWaiting())
+    (async () => {
+      const cache = await caches.open(CACHE_NAME)
+      const results = await Promise.allSettled(
+        PRECACHE_URLS.map((url) =>
+          cache.add(url).catch(() => {
+            // Try fetching and putting manually in case cache.add doesn't support the response
+            return fetch(url).then((res) => {
+              if (res.ok) cache.put(url, res)
+            })
+          })
+        )
+      )
+      const failed = results.filter((r) => r.status === 'rejected')
+      if (failed.length > 0) {
+        console.warn('[SW] Pre-cache failures:', failed.length, 'of', PRECACHE_URLS.length)
+      }
+      self.skipWaiting()
+    })()
   )
 })
 
-// ── Activate: remove old caches ───────────────────────────────────────────
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -42,18 +56,14 @@ self.addEventListener('activate', (event) => {
   )
 })
 
-// ── Fetch: cache-first for static assets, network-first for navigation ────
 self.addEventListener('fetch', (event) => {
   const { request } = event
   const url = new URL(request.url)
 
-  // Skip non-GET and cross-origin requests
   if (request.method !== 'GET' || url.origin !== location.origin) return
 
-  // Audio: network only (don't cache large audio files)
   if (url.pathname.startsWith('/audio/')) return
 
-  // Static assets (JS, CSS, fonts, images): cache-first
   if (
     url.pathname.startsWith('/_next/static/') ||
     url.pathname.startsWith('/icons/') ||
@@ -73,7 +83,6 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  // Navigation / HTML: stale-while-revalidate
   event.respondWith(
     (async () => {
       const cache = await caches.open(CACHE_NAME)

@@ -41,6 +41,8 @@ body {
   color: var(--color-cream);
   min-height: 100vh;
   overflow-x: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ── Scrollbar ────────────────────────────────────────────────────────────── */
