@@ -12,3 +12,8 @@ preview_id = "c3f962bd3be346a28bbbcae6d59559b6"
 binding = "NOTIFICATION_LOG"
 id = "69dfbc3f30ff4b63b010b3f17821ae95"
 preview_id = "69dfbc3f30ff4b63b010b3f17821ae95"
+
+[vars]
+VAPID_PUBLIC_KEY = "BC3QFKi369Frrigo7muxsbwJhdWHtg_VR2zkyVtsq6ISHSQcssMpgFu0nHgpYlk9vF8gHo444crfmYNgEty2hdc"
+VAPID_SUBJECT = "mailto:gpl.dalai5@gmail.com"
+SITE_URL = "https://ekadashi.pages.dev"

@@ -2,7 +2,7 @@ const PERMISSION_KEY = 'ekadashi_notif_permitted'
 const EKADASHI_NOTIFIED_KEY = 'ekadashi_notified'
 const PUSH_SUB_KEY = 'ekadashi_push_sub'
 
-export const PUSH_WORKER_URL = 'https://ekadashi-push.your-subdomain.workers.dev'
+export const PUSH_WORKER_URL = 'https://ekadashi-push.gourgopal.workers.dev'
 
 function arrayBufferToUrlBase64(buf: ArrayBuffer): string {
   const bytes = new Uint8Array(buf)
