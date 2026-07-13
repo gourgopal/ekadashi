@@ -94,7 +94,7 @@ async function encryptPayload(payload: string, sub: PushSub): Promise<{ body: Ui
   const noncePrk = await hmac(prk, nonceInfo)
   const nonce = noncePrk.slice(0, 12)
 
-  const plaintext = new Uint8Array([0, ...strToBytes(payload)])
+  const plaintext = new Uint8Array([0, ...strToBytes(payload), 1])
   const encKey = await crypto.subtle.importKey('raw', cek, { name: 'AES-GCM' }, false, ['encrypt'])
   const encrypted = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: nonce, additionalData: new Uint8Array(0), tagLength: 128 }, encKey, plaintext))
 
@@ -116,6 +116,7 @@ async function sendPush(sub: PushSub, payload: string, env: Env): Promise<void> 
     method: 'POST',
     headers: {
       'Content-Encoding': 'aes128gcm',
+      'Crypto-Key': `dh=${enc.pubKey}; p256ecdsa=${vapid.pubKeyB64}`,
       'Authorization': `vapid t=${vapid.jwt}, k=${vapid.pubKeyB64}`,
       'TTL': '86400',
     },
