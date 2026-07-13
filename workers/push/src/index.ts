@@ -90,7 +90,7 @@ function diffDays(a: string, b: string): number {
 }
 
 function mkAlert(title: string, body: string, tag: string): Alert {
-  return { title, body, tag, icon: '/icons/icon-192.png', badge: '/icons/badge.png', image: '/icons/icon-512.png', vibrate: [200, 100, 200], url: '/' }
+  return { title, body, tag, icon: '/icons/icon-192.png', badge: '/icons/badge.png', image: '/icons/notification-banner.png', vibrate: [200, 100, 200], url: '/' }
 }
 
 function getEkadashiAlerts(ekadashis: EkadashiEntry[], today: string): Alert[] {
@@ -120,6 +120,36 @@ function getFestivalAlerts(festivals: FestivalEntry[], today: string): Alert[] {
 function getJaapAlerts(today: string, time: string): Alert[] {
   const label = time < '12:00' ? '🌅 Morning' : '🌇 Evening'
   return [mkAlert(`${label} Jaap Reminder`, 'Time for your Hare Krishna Maha-mantra japa rounds!', `jp:${today}:${time}`)]
+}
+
+function getNextEkadashiAlert(ekadashis: EkadashiEntry[], today: string): Alert[] {
+  // Find the next ekadashi (smallest positive diffDays)
+  let next: EkadashiEntry | null = null
+  let nextDays = Infinity
+  for (const e of ekadashis) {
+    const d = diffDays(e.date, today)
+    if (d > 0 && d < nextDays) { next = e; nextDays = d }
+  }
+  if (!next) return []
+
+  const d = nextDays
+  const emoji = d <= 14 ? '🪔' : '📿'
+  // Only send "coming soon" if > 3 days (the getEkadashiAlerts handles <= 3 days)
+  if (d <= 3) return []
+  const body = d <= 30
+    ? `${next.name} is in ${d} days. Prepare your fast! Break fast: ${next.parana_start} – ${next.parana_end}`
+    : `Next ekadashi: ${next.name} (${d} days away)`
+  return [mkAlert(`${emoji} ${next.name} in ${d} days`, body, `ek:next:${next.date}`)]
+}
+
+function getDailyAllAlerts(ekadashis: EkadashiEntry[], festivals: FestivalEntry[], today: string): Alert[] {
+  return [
+    ...getJaapAlerts(today, '06:00'),
+    ...getJaapAlerts(today, '18:00'),
+    ...getEkadashiAlerts(ekadashis, today),
+    ...getNextEkadashiAlert(ekadashis, today),
+    ...getFestivalAlerts(festivals, today),
+  ]
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────
@@ -201,7 +231,7 @@ export default {
         tag: 'test-' + Date.now(),
         icon: '/icons/icon-192.png',
         badge: '/icons/badge.png',
-        image: '/icons/icon-512.png',
+        image: '/icons/notification-banner.png',
         vibrate: [200, 100, 200],
       }
       await env.NOTIFICATION_LOG.put(CURRENT_ALERTS_KEY, JSON.stringify([testAlert]))
@@ -259,19 +289,13 @@ export default {
       if (url.searchParams.get('secret') !== env.CRON_SECRET) return json({ error: 'Unauthorized' }, 401)
 
       const today = new Date().toISOString().split('T')[0]
-      const nowTime = today + 'T' + new Date().toTimeString().slice(0, 5)
 
       let ekadashis: EkadashiEntry[] = []
       try { ekadashis = (await (await fetch(`${env.SITE_URL}/ekadashi-data.json`)).json() as Array<{ year: number; ekadashis: EkadashiEntry[] }>).flatMap(y => y.ekadashis) } catch { /* empty */ }
       let festivals: FestivalEntry[] = []
       try { festivals = await (await fetch(`${env.SITE_URL}/festivals-data.json`)).json() as FestivalEntry[] } catch { /* empty */ }
 
-      const allAlerts = [
-        ...getEkadashiAlerts(ekadashis, today),
-        ...getFestivalAlerts(festivals, today),
-        ...getJaapAlerts(today, '06:00'),
-        ...getJaapAlerts(today, '18:00'),
-      ]
+      const allAlerts = getDailyAllAlerts(ekadashis, festivals, today)
 
       const logKey = `sent:${today}`
       const sentTags = new Set<string>()
@@ -294,6 +318,7 @@ export default {
         try { prefs = { ...DEFAULT_PREFS, ...JSON.parse((await env.SUBSCRIPTIONS.get(`prefs:${id}`)) || '{}') } } catch { /* use defaults */ }
 
         const userAlerts = newAlerts.filter(a => {
+          if (a.tag.startsWith('ek:next:')) return prefs.ekadashiReminders
           if (a.tag.startsWith('ek:')) return prefs.ekadashiReminders
           if (a.tag.startsWith('ft:')) return prefs.festivalReminders
           if (a.tag.startsWith('jp:') && a.tag.endsWith('06:00')) return prefs.jaapMorning

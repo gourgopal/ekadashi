@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ekadashi-v6'
+const CACHE_NAME = 'ekadashi-v7'
 
 const PUSH_WORKER = 'https://ekadashi-push.gourgopal.workers.dev'
 
@@ -36,7 +36,7 @@ self.addEventListener('push', (event) => {
             tag: a.tag || 'push-' + Date.now(),
             icon: a.icon || '/icons/icon-192.png',
             badge: a.badge || '/icons/badge.png',
-            image: a.image || '/icons/icon-512.png',
+            image: a.image || '/icons/notification-banner.png',
             vibrate: a.vibrate || [200, 100, 200],
             requireInteraction: true,
             data: { url: a.url || '/' },
@@ -52,7 +52,7 @@ self.addEventListener('push', (event) => {
           tag: data.tag || 'push-' + Date.now(),
           icon: data.icon || '/icons/icon-192.png',
           badge: data.badge || '/icons/badge.png',
-          image: data.image || '/icons/icon-512.png',
+          image: data.image || '/icons/notification-banner.png',
           vibrate: [200, 100, 200],
           requireInteraction: true,
           data: { url: data.url || '/' },
@@ -66,7 +66,7 @@ self.addEventListener('push', (event) => {
         tag: 'push-' + Date.now(),
         icon: '/icons/icon-192.png',
         badge: '/icons/badge.png',
-        image: '/icons/icon-512.png',
+        image: '/icons/notification-banner.png',
         vibrate: [200, 100, 200],
         requireInteraction: true,
         data: { url: '/' },

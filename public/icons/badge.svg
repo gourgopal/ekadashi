@@ -1,11 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
   <!-- Gaudiya Vaishnava Urdhva Pundra tilak -->
-  <!-- Left vertical line -->
-  <rect x="22" y="14" width="10" height="68" rx="3" fill="white"/>
-  <!-- Right vertical line -->
-  <rect x="64" y="14" width="10" height="68" rx="3" fill="white"/>
-  <!-- Tulsi leaf / rounded top -->
-  <ellipse cx="48" cy="16" rx="22" ry="8" fill="white"/>
-  <!-- Bindu (dot) above center -->
-  <circle cx="48" cy="5" r="3" fill="white"/>
+  <!-- Left vertical line — gentle outward curve, tapered bottom -->
+  <path d="M30 13 C26 30 24 55 27 76 C28 82 34 84 36 80 C38 72 38 42 36 13 Z" fill="white"/>
+  <!-- Right vertical line — gentle outward curve, tapered bottom -->
+  <path d="M66 13 C70 30 72 55 69 76 C68 82 62 84 60 80 C58 72 58 42 60 13 Z" fill="white"/>
+  <!-- Tulsi leaf at top — pointed ends, broader middle -->
+  <path d="M34 17 C42 4 54 4 62 17 C54 28 42 28 34 17 Z" fill="white"/>
+  <!-- Leaf center crease -->
+  <path d="M48 10 C48 17 48 22 48 26" stroke="white" stroke-width="0.8" fill="none"/>
+  <!-- Bindu (dot) above -->
+  <circle cx="48" cy="4" r="2.5" fill="white"/>
 </svg>
