@@ -5,7 +5,7 @@ interface Env {
   SUBSCRIPTIONS: KVNamespace
   NOTIFICATION_LOG: KVNamespace
   VAPID_PUBLIC_KEY: string
-  VAPID_PRIVATE_KEY: string
+  VAPID_PRIVATE_KEY?: string
   VAPID_SUBJECT: string
   SITE_URL: string
   CRON_SECRET: string
@@ -87,7 +87,9 @@ export default {
     const url = new URL(request.url)
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors })
 
-    webpush.setVapidDetails(env.VAPID_SUBJECT, env.VAPID_PUBLIC_KEY, env.VAPID_PRIVATE_KEY)
+    if (env.VAPID_PRIVATE_KEY) {
+      webpush.setVapidDetails(env.VAPID_SUBJECT, env.VAPID_PUBLIC_KEY, env.VAPID_PRIVATE_KEY)
+    }
 
     // GET /vapid-public-key
     if (url.pathname === '/vapid-public-key') {
@@ -201,12 +203,32 @@ export default {
       return json({ sent: sentCount, alerts: newAlerts.length, removed: removedCount })
     }
 
+    // GET /debug — Check configuration
+    if (url.pathname === '/debug' && request.method === 'GET') {
+      if (url.searchParams.get('secret') !== env.CRON_SECRET) return json({ error: 'Unauthorized' }, 401)
+      const hasPub = !!env.VAPID_PUBLIC_KEY
+      const hasPriv = !!env.VAPID_PRIVATE_KEY
+      const hasSubj = !!env.VAPID_SUBJECT
+      const subCount = (await env.SUBSCRIPTIONS.list({ prefix: 'sub:' })).keys.length
+      return json({
+        vapid: { publicKey: hasPub, privateKey: hasPriv, subject: hasSubj },
+        subscribers: subCount,
+        siteUrl: env.SITE_URL,
+      })
+    }
+
     // GET /test — Send test notification to all subscribers
     if (url.pathname === '/test' && request.method === 'GET') {
       if (url.searchParams.get('secret') !== env.CRON_SECRET) return json({ error: 'Unauthorized' }, 401)
 
+      // Re-configure webpush fresh for this request
+      if (!env.VAPID_PRIVATE_KEY) return json({ error: 'VAPID_PRIVATE_KEY not set. Add it as a Dashboard Secret.' }, 500)
+
+      webpush.setVapidDetails(env.VAPID_SUBJECT, env.VAPID_PUBLIC_KEY, env.VAPID_PRIVATE_KEY)
+
       const testAlert = { title: '🔔 Test Notification', body: 'Hare Krishna! Push notifications are working ✅', tag: `test:${Date.now()}` }
       let sentCount = 0
+      let errors: string[] = []
       const subs = await env.SUBSCRIPTIONS.list({ prefix: 'sub:' })
       for (const { name } of subs.keys) {
         const raw = await env.SUBSCRIPTIONS.get(name)
@@ -216,9 +238,11 @@ export default {
             ...testAlert, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png', vibrate: [200, 100, 200],
           }), { TTL: 86400 })
           sentCount++
-        } catch { /* skip */ }
+        } catch (err: any) {
+          errors.push(`${name.substring(0, 16)}...: ${err.message || err.statusCode || err}`)
+        }
       }
-      return json({ sent: sentCount, subscribers: subs.keys.length })
+      return json({ sent: sentCount, subscribers: subs.keys.length, errors: errors.length ? errors : undefined })
     }
 
     return json({ error: 'Not found' }, 404)
