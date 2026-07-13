@@ -201,6 +201,26 @@ export default {
       return json({ sent: sentCount, alerts: newAlerts.length, removed: removedCount })
     }
 
+    // GET /test — Send test notification to all subscribers
+    if (url.pathname === '/test' && request.method === 'GET') {
+      if (url.searchParams.get('secret') !== env.CRON_SECRET) return json({ error: 'Unauthorized' }, 401)
+
+      const testAlert = { title: '🔔 Test Notification', body: 'Hare Krishna! Push notifications are working ✅', tag: `test:${Date.now()}` }
+      let sentCount = 0
+      const subs = await env.SUBSCRIPTIONS.list({ prefix: 'sub:' })
+      for (const { name } of subs.keys) {
+        const raw = await env.SUBSCRIPTIONS.get(name)
+        if (!raw) continue
+        try {
+          await webpush.sendNotification(JSON.parse(raw) as any, JSON.stringify({
+            ...testAlert, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png', vibrate: [200, 100, 200],
+          }), { TTL: 86400 })
+          sentCount++
+        } catch { /* skip */ }
+      }
+      return json({ sent: sentCount, subscribers: subs.keys.length })
+    }
+
     return json({ error: 'Not found' }, 404)
   },
 
