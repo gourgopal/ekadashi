@@ -181,5 +181,5 @@ for (let i = 0; i <= 40; i++) {
 // Bindu watermark
 wdot(mW, mH - wmS*95, 6, 20);
 
-writeFileSync('public/notification-banner.png', png(W, H, bp));
+writeFileSync('public/icons/notification-banner.png', png(W, H, bp));
 console.log('notification-banner.png generated');
