@@ -1,47 +1,7 @@
-const CACHE_NAME = 'ekadashi-v3'
+const CACHE_NAME = 'ekadashi-v4'
 
-const PRECACHE_URLS = [
-  '/',
-  '/en/',
-  '/en/calendar/',
-  '/en/tracker/',
-  '/en/resources/',
-  '/hi/',
-  '/hi/calendar/',
-  '/hi/tracker/',
-  '/hi/resources/',
-  '/sa/',
-  '/sa/calendar/',
-  '/sa/tracker/',
-  '/sa/resources/',
-  '/ru/',
-  '/ru/calendar/',
-  '/ru/tracker/',
-  '/ru/resources/',
-  '/manifest.webmanifest',
-]
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    (async () => {
-      const cache = await caches.open(CACHE_NAME)
-      const results = await Promise.allSettled(
-        PRECACHE_URLS.map((url) =>
-          cache.add(url).catch(() => {
-            // Try fetching and putting manually in case cache.add doesn't support the response
-            return fetch(url).then((res) => {
-              if (res.ok) cache.put(url, res)
-            })
-          })
-        )
-      )
-      const failed = results.filter((r) => r.status === 'rejected')
-      if (failed.length > 0) {
-        console.warn('[SW] Pre-cache failures:', failed.length, 'of', PRECACHE_URLS.length)
-      }
-      self.skipWaiting()
-    })()
-  )
+self.addEventListener('install', () => {
+  self.skipWaiting()
 })
 
 self.addEventListener('activate', (event) => {
