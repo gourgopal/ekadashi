@@ -1,27 +1,54 @@
-const CACHE_NAME = 'ekadashi-v4'
+const CACHE_NAME = 'ekadashi-v5'
+const PUSH_WORKER_URL = 'https://ekadashi-push.your-subdomain.workers.dev'
 
-self.addEventListener('install', () => {
-  self.skipWaiting()
-})
+self.addEventListener('install', () => self.skipWaiting())
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      )
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
     ).then(() => self.clients.claim())
   )
 })
 
+// ── Push event: show notification from payload ─────────────────────────
+self.addEventListener('push', (event) => {
+  let data: { title: string; body: string; tag: string; icon?: string; badge?: string; image?: string } | null = null
+  try {
+    if (event.data) data = event.data.json()
+  } catch { /* ignore */ }
+
+  if (data) {
+    const options: NotificationOptions = {
+      body: data.body,
+      tag: data.tag,
+      icon: data.icon || '/icons/icon-192.png',
+      badge: data.badge || '/icons/icon-192.png',
+      vibrate: [200, 100, 200],
+      data: { url: '/' },
+      requireInteraction: true,
+      silent: false,
+    }
+    if (data.image) options.image = data.image
+    event.waitUntil(self.registration.showNotification(data.title, options))
+  }
+})
+
+// ── Notification click: navigate to relevant page ──────────────────────
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  let url = '/'
+  if (event.notification.tag?.startsWith('ek:')) url = '/en/calendar/'
+  else if (event.notification.tag?.startsWith('ft:')) url = '/en/calendar/'
+  else if (event.notification.tag?.startsWith('jp:')) url = '/en/tracker/'
+  event.waitUntil(self.clients.openWindow(url))
+})
+
+// ── Fetch: cache-first strategy ────────────────────────────────────────
 self.addEventListener('fetch', (event) => {
   const { request } = event
   const url = new URL(request.url)
-
   if (request.method !== 'GET' || url.origin !== location.origin) return
-
   if (url.pathname.startsWith('/audio/')) return
 
   if (

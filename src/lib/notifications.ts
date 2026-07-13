@@ -1,11 +1,15 @@
-/**
- * src/lib/notifications.ts
- * Notification utilities for Naam Jaap reminders and Ekadashi alerts.
- */
-
 const PERMISSION_KEY = 'ekadashi_notif_permitted'
-const JAAP_REMINDER_KEY = 'ekadashi_jaap_reminder_hour'
 const EKADASHI_NOTIFIED_KEY = 'ekadashi_notified'
+const PUSH_SUB_KEY = 'ekadashi_push_sub'
+
+export const PUSH_WORKER_URL = 'https://ekadashi-push.your-subdomain.workers.dev'
+
+function arrayBufferToUrlBase64(buf: ArrayBuffer): string {
+  const bytes = new Uint8Array(buf)
+  let binary = ''
+  for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i])
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
 
 export function isNotificationSupported(): boolean {
   return typeof window !== 'undefined' && 'Notification' in window && 'serviceWorker' in navigator
@@ -29,6 +33,68 @@ export function hasPermission(): boolean {
 export function wasPrompted(): boolean {
   return localStorage.getItem(PERMISSION_KEY) === 'true'
 }
+
+// ── Push subscription ──────────────────────────────────────────────────
+
+export async function subscribeToPush(): Promise<boolean> {
+  if (!hasPermission()) return false
+  try {
+    const reg = await navigator.serviceWorker.ready
+    let sub = await reg.pushManager.getSubscription()
+    if (!sub) {
+      const resp = await fetch(`${PUSH_WORKER_URL}/vapid-public-key`)
+      const { key } = await resp.json() as { key: string }
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: key,
+      })
+    }
+    await fetch(`${PUSH_WORKER_URL}/subscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        subscription: {
+          endpoint: sub.endpoint,
+          keys: {
+            p256dh: arrayBufferToUrlBase64(sub.getKey('p256dh')!),
+            auth: arrayBufferToUrlBase64(sub.getKey('auth')!),
+          },
+        },
+        prefs: { ekadashiReminders: true, festivalReminders: true },
+      }),
+    })
+    localStorage.setItem(PUSH_SUB_KEY, 'true')
+    return true
+  } catch {
+    return false
+  }
+}
+
+export async function unsubscribeFromPush(): Promise<boolean> {
+  try {
+    const reg = await navigator.serviceWorker.ready
+    const sub = await reg.pushManager.getSubscription()
+    if (sub) {
+      const p256dh = arrayBufferToUrlBase64(sub.getKey('p256dh')!)
+      await fetch(`${PUSH_WORKER_URL}/unsubscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p256dh }),
+      })
+      await sub.unsubscribe()
+    }
+    localStorage.removeItem(PUSH_SUB_KEY)
+    return true
+  } catch {
+    return false
+  }
+}
+
+export function isPushSubscribed(): boolean {
+  return localStorage.getItem(PUSH_SUB_KEY) === 'true'
+}
+
+// ── Local notifications (fallback) ─────────────────────────────────────
 
 export async function showNaamJaapReminder(mahamantra: string): Promise<void> {
   if (!hasPermission()) return
@@ -56,6 +122,10 @@ export async function showEkadashiNotification(name: string, parana: string): Pr
   } as any)
   localStorage.setItem(`${EKADASHI_NOTIFIED_KEY}_${today}`, 'true')
 }
+
+// ── Legacy jaap reminder (local setTimeout) ────────────────────────────
+
+const JAAP_REMINDER_KEY = 'ekadashi_jaap_reminder_hour'
 
 export function setJaapReminderHour(hour: number): void {
   localStorage.setItem(JAAP_REMINDER_KEY, String(hour))

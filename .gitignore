@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+workers/**/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -19,6 +20,7 @@
 
 # production
 /build
+workers/**/.wrangler
 
 # misc
 .DS_Store

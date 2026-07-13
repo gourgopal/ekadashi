@@ -1,0 +1,22 @@
+name = "ekadashi-push"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "SUBSCRIPTIONS"
+id = ""
+preview_id = ""
+
+[[kv_namespaces]]
+binding = "NOTIFICATION_LOG"
+id = ""
+preview_id = ""
+
+[vars]
+VAPID_SUBJECT = "mailto:dev@ekadashi.app"
+SITE_URL = "https://ekadashi.pages.dev"
+EKADASHI_DATA_URL = "https://ekadashi.pages.dev/en/ekadashi-data.json"
+
+[triggers]
+crons = ["0 6 * * *"]

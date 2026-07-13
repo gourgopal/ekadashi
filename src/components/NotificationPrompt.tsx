@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { requestPermission, hasPermission } from '@/lib/notifications'
+import { requestPermission, subscribeToPush, hasPermission, isPushSubscribed } from '@/lib/notifications'
 
 const PROMPT_KEY = 'ekadashi_notif_prompted'
 
@@ -31,6 +31,7 @@ export default function NotificationPrompt({ labels }: NotificationPromptProps) 
     localStorage.setItem(PROMPT_KEY, 'true')
     setVisible(false)
     if (ok) {
+      await subscribeToPush()
       setThanks(true)
       setTimeout(() => setThanks(false), 3000)
     }
