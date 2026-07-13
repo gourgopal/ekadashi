@@ -65,7 +65,8 @@ export async function subscribeToPush(): Promise<boolean> {
     })
     localStorage.setItem(PUSH_SUB_KEY, 'true')
     return true
-  } catch {
+  } catch (err) {
+    console.error('[Push] subscribe failed:', err)
     return false
   }
 }
@@ -85,7 +86,8 @@ export async function unsubscribeFromPush(): Promise<boolean> {
     }
     localStorage.removeItem(PUSH_SUB_KEY)
     return true
-  } catch {
+  } catch (err) {
+    console.error('[Push] unsubscribe failed:', err)
     return false
   }
 }
