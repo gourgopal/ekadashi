@@ -30,7 +30,7 @@ export default function NotificationPrompt({ labels }: NotificationPromptProps) 
     if ('permissions' in navigator) {
       navigator.permissions.query({ name: 'notifications' as PermissionName }).then(status => {
         status.onchange = () => {
-          if (status.state !== 'default') setVisible(false)
+          if (status.state === 'granted' || status.state === 'denied') setVisible(false)
         }
       })
     }
