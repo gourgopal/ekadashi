@@ -17,20 +17,27 @@ self.addEventListener('push', (event) => {
     if (event.data) data = event.data.json()
   } catch { /* ignore */ }
 
-  if (data) {
-    const options = {
-      body: data.body,
-      tag: data.tag,
-      icon: data.icon || '/icons/icon-192.png',
-      badge: data.badge || '/icons/icon-192.png',
-      vibrate: [200, 100, 200],
-      data: { url: '/' },
-      requireInteraction: true,
-      silent: false,
-    }
-    if (data.image) options.image = data.image
-    event.waitUntil(self.registration.showNotification(data.title, options))
-  }
+  console.log('[SW] Push received:', data?.tag)
+  event.waitUntil(
+    (async () => {
+      const title = data?.title || 'Hare Krishna!'
+      const body = data?.body || 'Tap to open Ekadashi Vrat'
+      const tag = data?.tag || 'push-' + Date.now()
+      const icon = data?.icon || '/icons/icon-192.png'
+      const options = {
+        body,
+        tag,
+        icon,
+        badge: data?.badge || '/icons/icon-192.png',
+        vibrate: [200, 100, 200],
+        data: { url: '/' },
+        requireInteraction: true,
+        silent: false,
+      }
+      if (data?.image) options.image = data.image
+      await self.registration.showNotification(title, options)
+    })()
+  )
 })
 
 // ── Notification click: navigate to relevant page ──────────────────────
