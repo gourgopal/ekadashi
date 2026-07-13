@@ -21,7 +21,9 @@ interface Alert {
   tag: string
   icon: string
   badge: string
+  image: string
   vibrate: number[]
+  url?: string
 }
 
 // ── Base64 utils ───────────────────────────────────────────────────────
@@ -88,7 +90,7 @@ function diffDays(a: string, b: string): number {
 }
 
 function mkAlert(title: string, body: string, tag: string): Alert {
-  return { title, body, tag, icon: '/icons/icon-192.png', badge: '/icons/badge.svg', vibrate: [200, 100, 200] }
+  return { title, body, tag, icon: '/icons/icon-192.png', badge: '/icons/badge.png', image: '/icons/icon-512.png', vibrate: [200, 100, 200], url: '/' }
 }
 
 function getEkadashiAlerts(ekadashis: EkadashiEntry[], today: string): Alert[] {
@@ -198,7 +200,8 @@ export default {
         body: 'Hare Krishna! Push working ✅',
         tag: 'test-' + Date.now(),
         icon: '/icons/icon-192.png',
-        badge: '/icons/badge.svg',
+        badge: '/icons/badge.png',
+        image: '/icons/icon-512.png',
         vibrate: [200, 100, 200],
       }
       await env.NOTIFICATION_LOG.put(CURRENT_ALERTS_KEY, JSON.stringify([testAlert]))
@@ -266,9 +269,9 @@ export default {
       const allAlerts = [
         ...getEkadashiAlerts(ekadashis, today),
         ...getFestivalAlerts(festivals, today),
+        ...getJaapAlerts(today, '06:00'),
+        ...getJaapAlerts(today, '18:00'),
       ]
-      if (nowTime.endsWith('06:00')) allAlerts.push(...getJaapAlerts(today, '06:00'))
-      if (nowTime.endsWith('18:00')) allAlerts.push(...getJaapAlerts(today, '18:00'))
 
       const logKey = `sent:${today}`
       const sentTags = new Set<string>()
@@ -293,6 +296,8 @@ export default {
         const userAlerts = newAlerts.filter(a => {
           if (a.tag.startsWith('ek:')) return prefs.ekadashiReminders
           if (a.tag.startsWith('ft:')) return prefs.festivalReminders
+          if (a.tag.startsWith('jp:') && a.tag.endsWith('06:00')) return prefs.jaapMorning
+          if (a.tag.startsWith('jp:') && a.tag.endsWith('18:00')) return prefs.jaapEvening
           return true
         })
         if (userAlerts.length === 0) continue

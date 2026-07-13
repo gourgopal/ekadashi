@@ -35,9 +35,11 @@ self.addEventListener('push', (event) => {
             body: a.body || 'Tap to open Ekadashi Vrat',
             tag: a.tag || 'push-' + Date.now(),
             icon: a.icon || '/icons/icon-192.png',
-            badge: a.badge || '/icons/badge.svg',
+            badge: a.badge || '/icons/badge.png',
+            image: a.image || '/icons/icon-512.png',
             vibrate: a.vibrate || [200, 100, 200],
             requireInteraction: true,
+            data: { url: a.url || '/' },
           })
         }
         return
@@ -49,9 +51,11 @@ self.addEventListener('push', (event) => {
           body: data.body || 'Tap to open Ekadashi Vrat',
           tag: data.tag || 'push-' + Date.now(),
           icon: data.icon || '/icons/icon-192.png',
-          badge: data.badge || '/icons/badge.svg',
+          badge: data.badge || '/icons/badge.png',
+          image: data.image || '/icons/icon-512.png',
           vibrate: [200, 100, 200],
           requireInteraction: true,
+          data: { url: data.url || '/' },
         })
         return
       }
@@ -61,9 +65,11 @@ self.addEventListener('push', (event) => {
         body: 'Tap to open Ekadashi Vrat',
         tag: 'push-' + Date.now(),
         icon: '/icons/icon-192.png',
-        badge: '/icons/badge.svg',
+        badge: '/icons/badge.png',
+        image: '/icons/icon-512.png',
         vibrate: [200, 100, 200],
         requireInteraction: true,
+        data: { url: '/' },
       })
     })()
   )

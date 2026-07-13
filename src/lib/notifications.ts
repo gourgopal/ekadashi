@@ -104,7 +104,8 @@ export async function showNaamJaapReminder(mahamantra: string): Promise<void> {
   reg.showNotification('📿 Naam Jaap Reminder', {
     body: mahamantra,
     icon: '/icons/icon-192.png',
-    badge: '/icons/badge.svg',
+    badge: '/icons/badge.png',
+    image: '/icons/icon-512.png',
     tag: 'jaap-reminder',
     vibrate: [200, 100, 200],
   } as any)
@@ -118,7 +119,8 @@ export async function showEkadashiNotification(name: string, parana: string): Pr
   reg.showNotification('🪔 Today is Ekadashi!', {
     body: `${name} — Parana: ${parana}. Hare Krishna!`,
     icon: '/icons/icon-192.png',
-    badge: '/icons/badge.svg',
+    badge: '/icons/badge.png',
+    image: '/icons/icon-512.png',
     tag: 'ekadashi-today',
     vibrate: [300, 100, 300, 100, 300],
   } as any)
