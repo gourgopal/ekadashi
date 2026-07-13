@@ -23,8 +23,16 @@ export default function NotificationPrompt({ labels }: NotificationPromptProps) 
 
   useEffect(() => {
     const prompted = localStorage.getItem(PROMPT_KEY)
-    if (!prompted && typeof Notification !== 'undefined' && Notification.permission === 'default') {
-      setVisible(true)
+    if (typeof Notification === 'undefined') return
+    if (Notification.permission === 'granted' || Notification.permission === 'denied') return
+    if (!prompted) setVisible(true)
+
+    if ('permissions' in navigator) {
+      navigator.permissions.query({ name: 'notifications' as PermissionName }).then(status => {
+        status.onchange = () => {
+          if (status.state !== 'default') setVisible(false)
+        }
+      })
     }
   }, [])
 
@@ -34,7 +42,9 @@ export default function NotificationPrompt({ labels }: NotificationPromptProps) 
     try {
       const ok = await requestPermission()
       if (!ok) {
-        setError('Permission was denied. Check your browser settings.')
+        localStorage.setItem(PROMPT_KEY, 'true')
+        setError('❌ Permission denied. Enable in browser settings (🔒 site info > Notifications > Allow).')
+        setTimeout(() => setVisible(false), 5000)
         setBusy(false)
         return
       }
