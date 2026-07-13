@@ -30,6 +30,9 @@ export default function manifest(): MetadataRoute.Manifest {
         { src: `/icons/icon-${s}.png`, sizes: `${s}x${s}`, type: 'image/png' as const, purpose: 'any' as const },
         { src: `/icons/icon-${s}.png`, sizes: `${s}x${s}`, type: 'image/png' as const, purpose: 'maskable' as const },
       ]),
+      // Monochrome badge for notification status bar (Android)
+      { src: '/icons/badge.svg', sizes: '96x96', type: 'image/svg+xml' as const, purpose: 'monochrome' as const },
+      { src: '/icons/badge.png', sizes: '96x96', type: 'image/png' as const, purpose: 'monochrome' as const },
     ],
     screenshots: [
       {
