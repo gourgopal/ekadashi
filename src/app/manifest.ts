@@ -28,7 +28,22 @@ export default function manifest(): MetadataRoute.Manifest {
         { src: `/icons/icon-${s}.png`, sizes: `${s}x${s}`, type: 'image/png' as const, purpose: 'maskable' as const },
       ]),
     ],
-    screenshots: [],
+    screenshots: [
+      {
+        src: '/screenshots/desktop.png',
+        sizes: '1280x720',
+        type: 'image/png',
+        form_factor: 'wide',
+        label: 'Ekadashi Vrat — Desktop View',
+      },
+      {
+        src: '/screenshots/mobile.png',
+        sizes: '720x1280',
+        type: 'image/png',
+        form_factor: 'narrow',
+        label: 'Ekadashi Vrat — Mobile View',
+      },
+    ],
     shortcuts: [
       {
         name: 'Jaap Tracker',
