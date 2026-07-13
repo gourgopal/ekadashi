@@ -79,20 +79,19 @@ async function encryptPayload(payload: string, sub: PushSub): Promise<{ body: Ui
   serverPubRaw.set(b64UrlToBytes(serverJwk.x), 1)
   serverPubRaw.set(b64UrlToBytes(serverJwk.y), 33)
 
-  // PRK = HMAC-SHA256(auth, shared)
+  // PRK = HMAC-SHA256(auth_secret, shared_secret) per RFC 8291
   const prk = await hmac(auth, shared)
 
-  // Context = "WebPush: info" || 0x00 || clientAuth || serverPub
-  const context = new Uint8Array([...strToBytes('WebPush: info'), 0x00, ...auth, ...serverPubRaw])
-
-  // CEK derivation
-  const cekInfo = new Uint8Array([...strToBytes('Content-Encoding: aes128gcm\x00'), ...context])
-  const cekPrk = await hmac(cekInfo, prk)
+  // CEK = HKDF-Expand(PRK, "Content-Encoding: aes128gcm", 16)
+  //     = HMAC-SHA256(PRK, "Content-Encoding: aes128gcm" || 0x01).slice(0, 16)
+  const cekInfo = new Uint8Array([...strToBytes('Content-Encoding: aes128gcm'), 0x01])
+  const cekPrk = await hmac(prk, cekInfo)
   const cek = cekPrk.slice(0, 16)
 
-  // Nonce derivation
-  const nonceInfo = new Uint8Array([...strToBytes('Content-Encoding: nonce\x00'), ...context])
-  const noncePrk = await hmac(nonceInfo, prk)
+  // Nonce = HKDF-Expand(PRK, "Content-Encoding: nonce", 12)
+  //       = HMAC-SHA256(PRK, "Content-Encoding: nonce" || 0x01).slice(0, 12)
+  const nonceInfo = new Uint8Array([...strToBytes('Content-Encoding: nonce'), 0x01])
+  const noncePrk = await hmac(prk, nonceInfo)
   const nonce = noncePrk.slice(0, 12)
 
   const plaintext = new Uint8Array([0, ...strToBytes(payload)])
@@ -116,10 +115,7 @@ async function sendPush(sub: PushSub, payload: string, env: Env): Promise<void> 
   const resp = await fetch(sub.endpoint, {
     method: 'POST',
     headers: {
-      'Content-Type': 'text/plain;charset=utf-8',
       'Content-Encoding': 'aes128gcm',
-      'Encryption': `salt=${enc.salt}`,
-      'Crypto-Key': `dh=${enc.pubKey};p256ecdsa=${vapid.pubKeyB64}`,
       'Authorization': `vapid t=${vapid.jwt}, k=${vapid.pubKeyB64}`,
       'TTL': '86400',
     },
