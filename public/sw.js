@@ -1,5 +1,4 @@
 const CACHE_NAME = 'ekadashi-v5'
-const PUSH_WORKER_URL = 'https://ekadashi-push.your-subdomain.workers.dev'
 
 self.addEventListener('install', () => self.skipWaiting())
 
@@ -13,13 +12,13 @@ self.addEventListener('activate', (event) => {
 
 // ── Push event: show notification from payload ─────────────────────────
 self.addEventListener('push', (event) => {
-  let data: { title: string; body: string; tag: string; icon?: string; badge?: string; image?: string } | null = null
+  let data = null
   try {
     if (event.data) data = event.data.json()
   } catch { /* ignore */ }
 
   if (data) {
-    const options: NotificationOptions = {
+    const options = {
       body: data.body,
       tag: data.tag,
       icon: data.icon || '/icons/icon-192.png',
