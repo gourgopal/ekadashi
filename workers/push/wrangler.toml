@@ -5,18 +5,10 @@ compatibility_flags = ["nodejs_compat"]
 
 [[kv_namespaces]]
 binding = "SUBSCRIPTIONS"
-id = ""
-preview_id = ""
+id = "c3f962bd3be346a28bbbcae6d59559b6"
+preview_id = "c3f962bd3be346a28bbbcae6d59559b6"
 
 [[kv_namespaces]]
 binding = "NOTIFICATION_LOG"
-id = ""
-preview_id = ""
-
-[vars]
-VAPID_SUBJECT = "mailto:dev@ekadashi.app"
-SITE_URL = "https://ekadashi.pages.dev"
-EKADASHI_DATA_URL = "https://ekadashi.pages.dev/en/ekadashi-data.json"
-
-[triggers]
-crons = ["0 6 * * *"]
+id = "69dfbc3f30ff4b63b010b3f17821ae95"
+preview_id = "69dfbc3f30ff4b63b010b3f17821ae95"
