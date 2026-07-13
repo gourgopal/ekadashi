@@ -4,10 +4,10 @@ export const dynamic = 'force-static'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Ekadashi Vrat — Gaudiya Vaishnava Calendar',
+    name: 'Ekadashi: Calendar, Kirtan & Naam Jaap',
     short_name: 'Ekadashi',
     description:
-      'Complete Gaudiya Vaishnava Ekadashi calendar with fasting dates, parana times, and Naam Jaap tracker for ISKCON devotees worldwide.',
+      'Ekadashi fasting calendar with parana times, Naam Jaap japa counter, Kirtan audio player, and Gaudiya Vaishnava resources for ISKCON devotees worldwide.',
     id: '/',
     start_url: '/en/',
     scope: '/',
@@ -31,14 +31,14 @@ export default function manifest(): MetadataRoute.Manifest {
     screenshots: [
       {
         src: '/screenshots/desktop.png',
-        sizes: '1280x720',
+        sizes: '1920x1080',
         type: 'image/png',
         form_factor: 'wide',
         label: 'Ekadashi Vrat — Desktop View',
       },
       {
         src: '/screenshots/mobile.png',
-        sizes: '720x1280',
+        sizes: '1220x2516',
         type: 'image/png',
         form_factor: 'narrow',
         label: 'Ekadashi Vrat — Mobile View',

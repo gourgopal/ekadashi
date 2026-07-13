@@ -44,6 +44,7 @@ export async function generateMetadata({
     keywords: [
       'Ekadashi', 'ISKCON', 'Gaudiya Vaishnava', 'fasting', 'Ekadashi 2026',
       'Vaishnava calendar', 'Hare Krishna', 'parana time', 'Naam Jaap',
+      'japa counter', 'ekadashi app',
     ],
   }
 }
