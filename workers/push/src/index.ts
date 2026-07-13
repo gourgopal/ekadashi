@@ -62,16 +62,28 @@ async function hmac(key: Uint8Array, data: Uint8Array): Promise<Uint8Array> {
 async function encryptPayload(payload: string, sub: PushSub): Promise<{ body: Uint8Array; salt: string; pubKey: string }> {
   const salt = crypto.getRandomValues(new Uint8Array(16))
   const serverKeys = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveBits'])
-  const clientPub = await crypto.subtle.importKey('spki', b64UrlToBytes(sub.keys.p256dh), { name: 'ECDH', namedCurve: 'P-256' }, true, [])
+  // Import client's p256dh key (raw uncompressed 65-byte format) as JWK
+  const rawP256dh = b64UrlToBytes(sub.keys.p256dh)
+  const clientPub = await crypto.subtle.importKey('jwk', {
+    kty: 'EC', crv: 'P-256',
+    x: bytesToB64Url(rawP256dh.slice(1, 33)),
+    y: bytesToB64Url(rawP256dh.slice(33, 65)),
+    ext: true,
+  }, { name: 'ECDH', namedCurve: 'P-256' }, true, [])
   const shared = new Uint8Array(await crypto.subtle.deriveBits({ name: 'ECDH', public: clientPub }, serverKeys.privateKey, 256))
   const auth = b64UrlToBytes(sub.keys.auth)
-  const serverPub = new Uint8Array(await crypto.subtle.exportKey('spki', serverKeys.publicKey))
+  // Export server public key as raw uncompressed format (matching client's format)
+  const serverJwk = await crypto.subtle.exportKey('jwk', serverKeys.publicKey) as any
+  const serverPubRaw = new Uint8Array(65)
+  serverPubRaw[0] = 0x04
+  serverPubRaw.set(b64UrlToBytes(serverJwk.x), 1)
+  serverPubRaw.set(b64UrlToBytes(serverJwk.y), 33)
 
   // PRK = HMAC-SHA256(auth, shared)
   const prk = await hmac(auth, shared)
 
   // Context = "WebPush: info" || 0x00 || clientAuth || serverPub
-  const context = new Uint8Array([...strToBytes('WebPush: info'), 0x00, ...auth, ...serverPub])
+  const context = new Uint8Array([...strToBytes('WebPush: info'), 0x00, ...auth, ...serverPubRaw])
 
   // CEK derivation
   const cekInfo = new Uint8Array([...strToBytes('Content-Encoding: aes128gcm\x00'), ...context])
@@ -89,9 +101,9 @@ async function encryptPayload(payload: string, sub: PushSub): Promise<{ body: Ui
 
   // Build aes128gcm record: salt(16) || recordSize(4) || pubKeyLen(1) || pubKey(variable) || ciphertext
   const recordSize = new Uint8Array([0x00, 0x00, 0x10, 0x00]) // 4096
-  const body = new Uint8Array([...salt, ...recordSize, serverPub.length, ...serverPub, ...encrypted])
+  const body = new Uint8Array([...salt, ...recordSize, serverPubRaw.length, ...serverPubRaw, ...encrypted])
 
-  return { body, salt: bytesToB64Url(salt), pubKey: bytesToB64Url(serverPub) }
+  return { body, salt: bytesToB64Url(salt), pubKey: bytesToB64Url(serverPubRaw) }
 }
 
 // ── Send push via fetch ────────────────────────────────────────────────
